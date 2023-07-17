@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>chatBox</class>
- <widget class="QMainWindow" name="chatBox">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>657</width>
-    <height>542</height>
+    <width>677</width>
+    <height>398</height>
    </rect>
   </property>
   <property name="font">
@@ -16,7 +16,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>ChatBox</string>
+   <string>Chat</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListWidget" name="listWidget">
@@ -24,8 +24,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>631</width>
-      <height>281</height>
+      <width>461</width>
+      <height>381</height>
      </rect>
     </property>
     <property name="font">
@@ -34,12 +34,30 @@
      </font>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushClearButton">
+   <widget class="QLabel" name="receiverIP_Text">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>400</y>
-      <width>111</width>
+      <x>490</x>
+      <y>70</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>Receiver's IP :</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="receiverIP_Input">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>90</y>
+      <width>191</width>
       <height>31</height>
      </rect>
     </property>
@@ -48,291 +66,213 @@
       <family>Arial</family>
      </font>
     </property>
-    <property name="text">
-     <string>Clear Window</string>
+    <property name="maxLength">
+     <number>15</number>
     </property>
    </widget>
-   <widget class="QGroupBox" name="senderStuff">
+   <widget class="QLineEdit" name="receiverName_Input">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>440</y>
-      <width>641</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-    <property name="title">
-     <string/>
-    </property>
-    <widget class="QLabel" name="label_3">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>221</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Your message:</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="sendingButton">
-     <property name="geometry">
-      <rect>
-       <x>540</x>
-       <y>20</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>12</pointsize>
-      </font>
-     </property>
-     <property name="contextMenuPolicy">
-      <enum>Qt::PreventContextMenu</enum>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string>Send</string>
-     </property>
-     <property name="default">
-      <bool>false</bool>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="messageToSend">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>60</y>
-       <width>641</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="inputMask">
-      <string/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="maxLength">
-      <number>2000</number>
-     </property>
-     <property name="echoMode">
-      <enum>QLineEdit::Normal</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>190</x>
-       <y>10</y>
-       <width>221</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>7</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>(You may enter only 2000 letters)</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="ReceiverStuff">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>310</y>
-      <width>501</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string/>
-    </property>
-    <widget class="QLineEdit" name="receiverIP_Text">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>30</y>
-       <width>171</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="maxLength">
-      <number>15</number>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="registeredUserList">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>80</y>
-       <width>171</width>
-       <height>31</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>131</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="text">
-      <string>[ Receiver's IP ]</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="addUserButton">
-     <property name="geometry">
-      <rect>
-       <x>350</x>
-       <y>30</y>
-       <width>131</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>ADD USER</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="receiverName_Text">
-     <property name="geometry">
-      <rect>
-       <x>350</x>
-       <y>80</y>
-       <width>131</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="inputMask">
-      <string/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="maxLength">
-      <number>32767</number>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_5">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>131</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="text">
-      <string>Registered Users :</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QPushButton" name="clearSAVEFILE">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>360</y>
-      <width>111</width>
+      <x>480</x>
+      <y>30</y>
+      <width>191</width>
       <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Arial</family>
-      <pointsize>8</pointsize>
      </font>
     </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="text">
-     <string>Clear Reg. Users</string>
-    </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="receiverName_Text">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>300</y>
-      <width>111</width>
-      <height>61</height>
+      <x>490</x>
+      <y>10</y>
+      <width>151</width>
+      <height>20</height>
      </rect>
     </property>
-    <property name="cursor">
-     <cursorShape>ForbiddenCursor</cursorShape>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;!WARNING! : Will DELETE Both the save file and current Registered Users&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>Receiver's Name :</string>
     </property>
-    <property name="textFormat">
-     <enum>Qt::RichText</enum>
+   </widget>
+   <widget class="QComboBox" name="registeredUserList">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>190</y>
+      <width>191</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="eraseTextFileButton">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>220</y>
+      <width>131</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>Erased Saved User</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addReceiverButton">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>130</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>ADD RECEIVER</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="removeSelectedButton">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>130</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>Remove Selected</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="registeredUserText">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>170</y>
+      <width>171</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Registered Receivers</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
-    <property name="wordWrap">
-     <bool>true</bool>
+   </widget>
+   <widget class="QPushButton" name="clearScreenButton">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>340</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>Clear Screen</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="description_Text">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>280</y>
+      <width>141</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Allow up to 2000 characters</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="sendingButton">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>340</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="yourMessage_Input">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>300</y>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="maxLength">
+     <number>2000</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="yourMessage_Text">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>260</y>
+      <width>141</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+      <underline>true</underline>
+     </font>
+    </property>
+    <property name="text">
+     <string>Your Message</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
