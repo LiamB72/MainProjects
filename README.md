@@ -5,6 +5,7 @@ Have atleast python 3.10, lastest version of pip, installed PyQT5, PyQT5-tools, 
 Python : https://www.python.org/downloads/
 
 PIP : https://bootstrap.pypa.io/get-pip.py
+In case you already installed it. Run : python.exe -m pip install --upgrade pip
 (For PIP to be installed, if not already, get the 'get-pip.py' file into the python local files, then run in a cmd, at the path of your python local file (cd path/to/your/python), run get-pip.py)
 
 pyqt5 & tools : pip install pyqt5 pyqt5-tools
