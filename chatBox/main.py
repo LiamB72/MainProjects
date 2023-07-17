@@ -13,9 +13,9 @@ if os.path.exists(file_path):
         pass
     items = list(registeredUsers.items())
     if registeredUsers != {}:
-        receiverNames = [key for key, _ in items]
-        receiverIPs = [value for _, value in items]
-    print(items, receiverNames, receiverIPs)   
+        receiverNames = [value for _, value in items]
+        receiverIPs = [key for key, _ in items]
+    print(items, receiverNames, receiverIPs)
 
 class MainWindows(QMainWindow):
     closed = pyqtSignal()
@@ -23,7 +23,7 @@ class MainWindows(QMainWindow):
     def __init__(self):
         global registeredUsers, receiverNames, receiverIPs
         super(MainWindows, self).__init__()
-        uic.loadUi('scripts\chatBox.ui', self)
+        uic.loadUi('PyFolder\chatBox\scripts\chatBox.ui', self)
         self.setFixedSize(self.size())
         self.show()
 
@@ -53,7 +53,8 @@ class MainWindows(QMainWindow):
             data = None
         if data != None:
             message = data.decode()
-            self.listWidget.insertItem(0, message)
+            
+            self.listWidget.insertItem(0, f"[From {registeredUsers[server[0]]}] : {message}")
             self.listWidget.item(0).setForeground(QtCore.Qt.white)
 
 
@@ -91,9 +92,9 @@ class MainWindows(QMainWindow):
                     print(self.names_count)
                     modified_name = f"{receiverName}_{count}"
                     name_bis.append(modified_name)
-                    registeredUsers[modified_name] = RECEIVER_IP
+                    registeredUsers[RECEIVER_IP] = modified_name
                 else:
-                    registeredUsers[receiverName] = RECEIVER_IP
+                    registeredUsers[RECEIVER_IP] = receiverName
 
             userList.addItem(receiverName)
 
