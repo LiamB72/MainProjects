@@ -28,20 +28,18 @@ class MainWindows(QMainWindow):
         self.show()
 
         self.sendingButton.clicked.connect(self.sendButton)
-        self.pushClearButton.clicked.connect(self.clearListWidget)
-        self.addUserButton.clicked.connect(self.addUser)
+        self.clearScreenButton.clicked.connect(self.clearListWidget)
+        self.addReceiverButton.clicked.connect(self.addUser)
         self.registeredUserList.currentIndexChanged.connect(self.selectionChange)
-        self.clearSAVEFILE.clicked.connect(self.clearSAVEDFILE)
+        self.eraseTextFileButton.clicked.connect(self.clearSAVEDFILE)
         
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update)
         self.timer.start(100)
 
         if len(receiverIPs) != 0 and len(receiverNames) != 0: 
-            self.receiverName_Text.setText(receiverNames[0])
-            self.receiverIP_Text.setText(receiverIPs[0])
-        else:
-            pass
+            self.receiverName_Input.setText(receiverNames[0])
+            self.receiverIP_Input.setText(receiverIPs[0])
         
         self.names_count = {}
         
@@ -62,15 +60,15 @@ class MainWindows(QMainWindow):
     def sendButton(self):
         SENDER_IP = "127.0.0.1"
         
-        if self.receiverIP_Text.text().strip() != "":
-            receiverName = self.receiverName_Text.text().strip()
-            RECEIVER_IP = self.receiverIP_Text.text().strip()
+        if self.receiverIP_Input.text().strip() != "":
+            receiverName = self.receiverName_Input.text().strip()
+            RECEIVER_IP = self.receiverIP_Input.text()
         else:
             RECEIVER_IP = "127.0.0.1"
             receiverName = ""
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        message = self.messageToSend.text()
+        message = self.yourMessage_Input.text().strip()
         data = message.encode("Utf8")
         print(f"Message sent: \"{message}\" \nTo: {RECEIVER_IP} ({receiverName})")
         sock.sendto(data, (RECEIVER_IP, RECEIVER_PORT))
@@ -83,8 +81,8 @@ class MainWindows(QMainWindow):
         userList = self.registeredUserList
         currentIndex = userList.currentIndex()
 
-        receiverName = self.receiverName_Text.text().strip()
-        RECEIVER_IP = self.receiverIP_Text.text().strip()
+        receiverName = self.receiverName_Input.text().strip()
+        RECEIVER_IP = self.receiverIP_Input.text().strip()
         if not (receiverName in receiverNames and RECEIVER_IP in receiverIPs):
             if receiverName:
                 if receiverName in receiverNames:
@@ -108,8 +106,8 @@ class MainWindows(QMainWindow):
         currentIndex = userList.currentIndex()
         
         if len(receiverIPs) != 0 and len(receiverNames) != 0: 
-            self.receiverName_Text.setText(str(receiverNames[currentIndex]))
-            self.receiverIP_Text.setText(str(receiverIPs[currentIndex]))
+            self.receiverName_Input.setText(str(receiverNames[currentIndex]))
+            self.receiverIP_Input.setText(str(receiverIPs[currentIndex]))
         else:
             pass
         
@@ -124,7 +122,6 @@ class MainWindows(QMainWindow):
         
         self.names_count.clear()
         
-
         userList = self.registeredUserList
         userList.clear()
         
