@@ -1,3 +1,14 @@
+#/////////////////////////////////////////////////////////////////////#
+#                            TO DO LIST :                             #
+# - Add a function to "Remove Selected" (Meant to remove the          #
+#   currentText of the combo box, without affecting the save file).   #
+# - Make some current features (e.g. Output in the console) count as  #
+#   debuggin'.                                                        #
+# - Beautify the code                                                 #
+# - Polish what need to be polished                                   #
+# - Forget about this project, since it will be completed!!           #
+#/////////////////////////////////////////////////////////////////////#
+
 from scripts.variables import *
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
