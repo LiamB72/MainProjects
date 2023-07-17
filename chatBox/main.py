@@ -1,4 +1,4 @@
-# Program entirely made by me, had to scroll throu a lot and a lot of stackflow stuff and what not programming&debuggin' sites to find the right solution and used a bit of the forbidden one too :p 
+# Program entirely made by me, had to scroll throu a lot and a lot of stack overflow stuff and what not programming&debuggin' sites to find the right solution and used a bit of the forbidden one too :p 
 
 from scripts.variables import *
 
