@@ -22,7 +22,7 @@ class MainWindows(QMainWindow):
     def __init__(self):
         global registeredUsers, receiverNames, receiverIPs
         super(MainWindows, self).__init__()
-        uic.loadUi('PyFolder\chatBox\scripts\chatBox.ui', self)
+        uic.loadUi('scripts\chatBox.ui', self)
         self.setFixedSize(self.size())
         self.show()
 
