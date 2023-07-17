@@ -107,36 +107,18 @@
     <property name="geometry">
      <rect>
       <x>480</x>
-      <y>190</y>
+      <y>210</y>
       <width>191</width>
       <height>22</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="eraseTextFileButton">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>220</y>
-      <width>131</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Arial</family>
-     </font>
-    </property>
-    <property name="text">
-     <string>Erased Saved User</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="addReceiverButton">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>510</x>
       <y>130</y>
-      <width>91</width>
+      <width>131</width>
       <height>21</height>
      </rect>
     </property>
@@ -152,8 +134,8 @@
    <widget class="QPushButton" name="removeSelectedButton">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>130</y>
+      <x>480</x>
+      <y>160</y>
       <width>91</width>
       <height>21</height>
      </rect>
@@ -161,6 +143,7 @@
     <property name="font">
      <font>
       <family>Arial</family>
+      <pointsize>7</pointsize>
      </font>
     </property>
     <property name="text">
@@ -171,7 +154,7 @@
     <property name="geometry">
      <rect>
       <x>490</x>
-      <y>170</y>
+      <y>190</y>
       <width>171</width>
       <height>20</height>
      </rect>
@@ -273,6 +256,31 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="eraseTextFileButton">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>160</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>7</pointsize>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600; font-style:italic; text-decoration: underline; color:#ffaa00;&quot;&gt;Will DELETE Both your current registered users, but also the saved ones&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="whatsThis">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="text">
+     <string>Delete Reg. Users</string>
     </property>
    </widget>
   </widget>
