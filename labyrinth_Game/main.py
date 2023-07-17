@@ -1,5 +1,4 @@
-
-#Programme réalisé par BERGE, Liam, 1G04
+# Most of the program was realized by me, however the engine on itself, was coded by my teacher, as a base for us.
 
 from scripts.variables import *
 from scripts.spriteLoader import *
