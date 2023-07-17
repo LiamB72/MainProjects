@@ -23,7 +23,7 @@ class MainWindows(QMainWindow):
     def __init__(self):
         global registeredUsers, receiverNames, receiverIPs
         super(MainWindows, self).__init__()
-        uic.loadUi('PyFolder\chatBox\scripts\chatBox.ui', self)
+        uic.loadUi('scripts\chatBox.ui', self)
         self.setFixedSize(self.size())
         self.show()
 
@@ -53,8 +53,11 @@ class MainWindows(QMainWindow):
             data = None
         if data != None:
             message = data.decode()
-            
-            self.listWidget.insertItem(0, f"[From {registeredUsers[server[0]]}] : {message}")
+            print(f"Message Received : {message}")
+            if registeredUsers[server[0]] != "":
+                self.listWidget.insertItem(0, f"[From {registeredUsers[server[0]]}] : {message}")
+            else:
+                self.listWidget.insertItem(0, f"[From [Unknown User] : {message}")
             self.listWidget.item(0).setForeground(QtCore.Qt.white)
 
 
@@ -71,7 +74,7 @@ class MainWindows(QMainWindow):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         message = self.yourMessage_Input.text().strip()
         data = message.encode("Utf8")
-        print(f"Message sent: \"{message}\" \nTo: {RECEIVER_IP} ({receiverName})")
+        print(f"Message sent: \"{message}\" \nReceiver's IP: {RECEIVER_IP} ({receiverName}) \nReceiver's Port : {RECEIVER_PORT}")
         sock.sendto(data, (RECEIVER_IP, RECEIVER_PORT))
 
     def clearListWidget(self):
