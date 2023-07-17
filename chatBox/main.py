@@ -1,9 +1,9 @@
-# Program entirely made by me, had to scroll throu a lot and a lot of stack overflow stuff and what not programming&debuggin' sites to find the right solution and used a bit of the forbidden one too :p 
+# Program entirely made by me, had to scroll throu a lot and a lot of stack overflow stuff and what not programming&debuggin' sites to find the right solution and used a bit of the forbidden one too :p
 
 from scripts.variables import *
 
 if os.path.exists(file_path):
-    file = open(file_path, 'r')
+    file = open(file_path, "r")
     file_data = file.read()
     try:
         registeredUsers = json.loads(file_data)
@@ -13,16 +13,16 @@ if os.path.exists(file_path):
     if registeredUsers != {}:
         receiverNames = [key for key, _ in items]
         receiverIPs = [value for _, value in items]
-    #print(items, receiverNames, receiverIPs)
-    
+    # print(items, receiverNames, receiverIPs)
+
 
 class MainWindows(QMainWindow):
     closed = pyqtSignal()
-    
+
     def __init__(self):
         global registeredUsers, receiverNames, receiverIPs
         super(MainWindows, self).__init__()
-        uic.loadUi('scripts\chatBox.ui', self)
+        uic.loadUi("scripts\chatBox.ui", self)
         self.setFixedSize(self.size())
         self.show()
 
@@ -31,19 +31,19 @@ class MainWindows(QMainWindow):
         self.addUserButton.clicked.connect(self.addUser)
         self.registeredUserList.currentIndexChanged.connect(self.selectionChange)
         self.clearSAVEFILE.clicked.connect(self.clearSAVEDFILE)
-        
+
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update)
         self.timer.start(100)
 
-        if len(receiverIPs) != 0 and len(receiverNames) != 0: 
+        if len(receiverIPs) != 0 and len(receiverNames) != 0:
             self.receiverName_Text.setText(receiverNames[0])
             self.receiverIP_Text.setText(receiverIPs[0])
         else:
             pass
-        
+
         self.names_count = {}
-        
+
         userList = self.registeredUserList
         userList.addItems(receiverNames)
 
@@ -57,9 +57,8 @@ class MainWindows(QMainWindow):
             self.listWidget.insertItem(0, message)
             self.listWidget.item(0).setForeground(QtCore.Qt.black)
 
-
     def sendButton(self):
-        
+
         if self.receiverIP_Text.text().strip() != "":
             RECEIVER_IP = self.receiverIP_Text.text().strip()
         else:
@@ -68,7 +67,7 @@ class MainWindows(QMainWindow):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         message = self.messageToSend.text().strip()
         octets = message.encode("Utf8")
-        print("Message sent:",message,"To:",RECEIVER_IP)
+        print("Message sent:", message, "To:", RECEIVER_IP)
         sock.sendto(octets, (RECEIVER_IP, RECEIVER_PORT))
 
     def clearListWidget(self):
@@ -95,51 +94,52 @@ class MainWindows(QMainWindow):
 
             userList.addItem(receiverName)
 
-            receiverNames.append(str(receiverName)) # Append to the global variable
+            receiverNames.append(str(receiverName))  # Append to the global variable
             receiverIPs.append(str(RECEIVER_IP))
-        
+
     def selectionChange(self):
         global registeredUsers, receiverNames, receiverIPs
-        userList = self.registeredUserList    
+        userList = self.registeredUserList
         currentIndex = userList.currentIndex()
-        
-        if len(receiverIPs) != 0 and len(receiverNames) != 0: 
+
+        if len(receiverIPs) != 0 and len(receiverNames) != 0:
             self.receiverName_Text.setText(str(receiverNames[currentIndex]))
             self.receiverIP_Text.setText(str(receiverIPs[currentIndex]))
         else:
             pass
-        
+
     def clearSAVEDFILE(self):
         global file_path, items, receiverIPs, receiverNames, registeredUsers, name_bis
-        
+
         items.clear()
         receiverIPs.clear()
         receiverNames.clear()
         registeredUsers.clear()
         name_bis.clear()
-        
+
         self.names_count.clear()
-        
 
         userList = self.registeredUserList
         userList.clear()
-        
+
         if os.path.exists(file_path):
-            file = open(file_path, 'w')
+            file = open(file_path, "w")
             file.truncate(0)
             print("Registered Users and File content have been deleted.")
             file.write("{}")
         else:
             print("file does not exist")
-        
+
     def closeEvent(self, event):
         self.closed.emit()
         super().closeEvent(event)
+
 
 def on_window_closed():
     file = open(file_path, "w")
     json.dump(registeredUsers, file)
     file.close()
+
 
 app = QApplication(sys.argv)
 window = MainWindows()
