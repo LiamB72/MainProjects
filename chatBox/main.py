@@ -1,12 +1,6 @@
 #/////////////////////////////////////////////////////////////////////#
 #                            TO DO LIST :                             #
-# - Add a function to "Remove Selected" (Meant to remove the          #
-#   currentText of the combo box, without affecting the save file).   #
-# - Make some current features (e.g. Output in the console) count as  #
-#   debuggin'.                                                        #
-# - Beautify the code                                                 #
-# - Polish what need to be polished                                   #
-# - Forget about this project, since it will be completed!!           #
+#                                                                     #
 #/////////////////////////////////////////////////////////////////////#
 
 from scripts.variables import *
@@ -26,15 +20,16 @@ if os.path.exists(file_path):
     if registeredUsers != {}:
         receiverNames = [value for _, value in items]
         receiverIPs = [key for key, _ in items]
-    print(items, receiverNames, receiverIPs)
-
+    if debugging:
+        print(f"\nCurrent IPs  : {receiverIPs},\nCurrent Names: {receiverNames},\nCurrent Items: {items}")
+        
 class MainWindows(QMainWindow):
     closed = pyqtSignal()
     
     def __init__(self):
         global registeredUsers, receiverNames, receiverIPs
         super(MainWindows, self).__init__()
-        uic.loadUi('scripts\chatBox.ui', self)
+        uic.loadUi('chatBox\scripts\chatBox.ui', self)
         self.setFixedSize(self.size())
         self.show()
 
@@ -43,6 +38,8 @@ class MainWindows(QMainWindow):
         self.addReceiverButton.clicked.connect(self.addUser)
         self.registeredUserList.currentIndexChanged.connect(self.selectionChange)
         self.eraseTextFileButton.clicked.connect(self.clearSAVEDFILE)
+        self.removeSelectedButton.clicked.connect(self.rmSelRegUser)
+        self.saveCurrentListButton.clicked.connect(self.saveCurrentRegUsers)
         
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update)
@@ -54,8 +51,8 @@ class MainWindows(QMainWindow):
         
         self.names_count = {}
         
-        userList = self.registeredUserList
-        userList.addItems(receiverNames)
+        self.userList = self.registeredUserList
+        self.userList.addItems(receiverNames)
 
     def update(self):
         try:
@@ -64,7 +61,8 @@ class MainWindows(QMainWindow):
             data = None
         if data != None:
             message = data.decode()
-            print(f"Message Received : {message}")
+            if debugging:
+                print(f"---\nMessage Received : {message}")
             if registeredUsers[server[0]] != "":
                 self.listWidget.insertItem(0, f"[From {registeredUsers[server[0]]}] : {message}")
             else:
@@ -85,7 +83,8 @@ class MainWindows(QMainWindow):
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         message = self.yourMessage_Input.text().strip()
         data = message.encode("Utf8")
-        print(f"Message sent: \"{message}\" \nReceiver's IP: {RECEIVER_IP} ({receiverName}) \nReceiver's Port : {RECEIVER_PORT}")
+        if debugging:
+            print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {RECEIVER_IP} ({receiverName}) \nReceiver's Port : {RECEIVER_PORT}") 
         sock.sendto(data, (RECEIVER_IP, RECEIVER_PORT))
 
     def clearListWidget(self):
@@ -93,8 +92,6 @@ class MainWindows(QMainWindow):
 
     def addUser(self):
         global registeredUsers, receiverNames, receiverIPs, name_bis
-        userList = self.registeredUserList
-        currentIndex = userList.currentIndex()
 
         receiverName = self.receiverName_Input.text().strip()
         RECEIVER_IP = self.receiverIP_Input.text().strip()
@@ -103,22 +100,22 @@ class MainWindows(QMainWindow):
                 if receiverName in receiverNames:
                     count = self.names_count.get(receiverName, 0) + 1
                     self.names_count[receiverName] = count
-                    print(self.names_count)
+                    if debugging:
+                        print(self.names_count)
                     modified_name = f"{receiverName}_{count}"
                     name_bis.append(modified_name)
                     registeredUsers[RECEIVER_IP] = modified_name
                 else:
                     registeredUsers[RECEIVER_IP] = receiverName
 
-            userList.addItem(receiverName)
+            self.userList.addItem(receiverName)
 
             receiverNames.append(str(receiverName))
             receiverIPs.append(str(RECEIVER_IP))
         
     def selectionChange(self):
-        global registeredUsers, receiverNames, receiverIPs
-        userList = self.registeredUserList    
-        currentIndex = userList.currentIndex()
+        global registeredUsers, receiverNames, receiverIPs    
+        currentIndex = self.userList.currentIndex()
         
         if len(receiverIPs) != 0 and len(receiverNames) != 0: 
             self.receiverName_Input.setText(str(receiverNames[currentIndex]))
@@ -137,8 +134,7 @@ class MainWindows(QMainWindow):
         
         self.names_count.clear()
         
-        userList = self.registeredUserList
-        userList.clear()
+        self.userList.clear()
         
         if os.path.exists(file_path):
             file = open(file_path, 'w')
@@ -147,6 +143,29 @@ class MainWindows(QMainWindow):
             file.write("{}")
         else:
             print("file does not exist")
+            
+    def rmSelRegUser(self):
+        global receiverIPs, receiverNames, registeredUsers, items
+        
+        currentIndex = self.userList.currentIndex()
+        self.userList.removeItem(currentIndex)
+        print(currentIndex)
+        
+        removedItem = items.pop(currentIndex)
+        removedIP = receiverIPs.pop(currentIndex)
+        removedName = receiverNames.pop(currentIndex)
+        
+        if debugging:
+            print(f"Removed Item: {removedItem} | Removed IP: {removedIP} | Removed Name: {removedName}\n\n----")
+            print(f"\nCurrent IPs  : {receiverIPs},\nCurrent Names: {receiverNames},\nCurrent Items: {items}")
+        
+    def saveCurrentRegUsers(self):
+        global receiverIPs, receiverNames, registeredUsers, items
+        
+        registeredUsers.clear()
+        formatted_data = {ip: name for ip, name in items}
+        registeredUsers.update(formatted_data)
+        
         
     def closeEvent(self, event):
         self.closed.emit()
