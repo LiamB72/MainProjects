@@ -189,12 +189,15 @@
      <rect>
       <x>500</x>
       <y>280</y>
-      <width>141</width>
+      <width>151</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Allow up to 2000 characters</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="sendingButton">
@@ -238,7 +241,7 @@
      <rect>
       <x>500</x>
       <y>260</y>
-      <width>141</width>
+      <width>151</width>
       <height>21</height>
      </rect>
     </property>
@@ -281,6 +284,25 @@
     </property>
     <property name="text">
      <string>Delete Reg. Users</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="saveCurrentListButton">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>240</y>
+      <width>111</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>7</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Save Current List</string>
     </property>
    </widget>
   </widget>
