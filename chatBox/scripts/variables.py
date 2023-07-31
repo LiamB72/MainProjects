@@ -24,3 +24,5 @@ items = []
 receiverNames = []
 receiverIPs = []
 name_bis = []
+
+debugging = True
