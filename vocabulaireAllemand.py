@@ -69,7 +69,7 @@ vocabulaire = {
                   "l'histoire",
                   "raconter une histoire",
                   "un élément du patrimoine culturel",
-                  "le peuple,"
+                  "le peuple",
                   "populaire",
                   "le récit populaire",
                   "le conte populaire",
