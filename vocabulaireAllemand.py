@@ -1,4 +1,5 @@
 from random import randint
+from time import sleep
 
 vocabulaire = {
     "die Märchen" : {
@@ -23,7 +24,8 @@ vocabulaire = {
                   "das Vorlesen",
                   "jm vor/lesen",
                   "jm ein Märchen vor/lesen",
-                  "der Ursprung ursprünglich",
+                  "der Ursprung", 
+                  "ursprünglich",
                   "früher",
                   "heute",
                   "heutzutage",
@@ -84,7 +86,8 @@ vocabulaire = {
                   "la lecture",
                   "faire la lecture à qn",
                   "lire un conte à qn",
-                  "l'origine au début",
+                  "l'origine", 
+                  "au début",
                   "autrefois",
                   "aujourd'hui",
                   "de nos jours",
@@ -272,37 +275,40 @@ class revision():
 
     def __init__(self):
 
-        self.restart = True
+        self.quit = False
+        
+        self.menu = True
+        menu = ""
+        
+        self.define_lists()
+        while not self.quit:
+            
+            if self.menu:
+                
+                self.menu = False
 
-        while self.restart:
+                print(f"\n\nAllemand: {self.lenG} mots,\nFrançais: {self.lenF} mots\n## Tu peux quitter à tout moments en entrant \"q\".")
+                print("\n\n<<-------------------->>\n")
 
-            self.define_lists()
-
-            print(f"\n\nAllemand: {self.lenG} mots,\nFrançais: {self.lenF} mots")
-
-            if self.userInput == "r":
-                self.define_variables()
-
-            print("\n\n<<-------------------->>\n\n")
-
-            if self.userInput == "r" :
-                self.run_revision()
-            if self.userInput == "t" :
-                self.run_translate()
-
-            restartInput = input("Recommencer? (Y/N) : ")
-
-            restartInput = restartInput.lower()
-            if restartInput == "y":
-                self.restart = True
-                if self.userInput == "r":
-                    self.usedWords.clear()
-            else:
-                self.restart = False
-
+                if self.userInput == "r" :
+                    self.define_variables()
+                    self.run_revision()
+                    menu = input("Go Back to Menu? (Y/N): ")
+                    menu = menu.lower()
+                    if menu == "y":
+                        self.menu = True  
+                    else:
+                        self.quit = True
+                    
+                if self.userInput == "t" :
+                    self.run_translate()
+                
     def define_lists(self):
         self.userInput = input("\nRevison (R) / Traduire (T) : ")
         self.userInput = self.userInput.lower()
+        if self.userInput == 'q':
+            self.quit = True  
+            return self.quit
 
         theme = input("\nMärchen Themed (M)\nAngst Themed (A)\nHeld - Vorbild - Eigenschaften Themed (HVE)\nChoice: ")
         theme = theme.lower()
@@ -341,6 +347,7 @@ class revision():
         if self.lenghtTraining <= self.lenG:
             a = 0
             while a < self.lenghtTraining:
+                
                 a += 1
                 self.z = randint(0, self.lenG-1)
                 if self.toGerman:
@@ -356,17 +363,31 @@ class revision():
                 else:
                     if self.rand == 0:
                         userAnswer = input(f"{self.lstG[self.z]} = ")
+                        
+                        if userAnswer == "q":
+                            self.menu = "y"
+                            return self.quit
+                        else:
+                            self.quit = ""
+                        
                         if userAnswer == self.lstF[self.z]:
                             print("Oui!\n")
                         else:
-                            print(f"Non! C'est {self.lstF[self.z]}\n")
+                            print(f"Non! C'est \"{self.lstF[self.z]}\"\n")
 
                     elif self.rand == 1 and self.toGerman:
+                        
+                        if userAnswer == "q":
+                            self.menu = "y"
+                            return self.quit
+                        else:
+                            self.quit = ""
+                        
                         userAnswer = input(f"{self.lstF[self.z]} = ")
                         if userAnswer == self.lstG[self.z]:
                             print("Oui!\n")
                         else:
-                            print(f"Non! C'est {self.lstG[self.z]}\n")
+                            print(f"Non! C'est \"{self.lstG[self.z]}\"\n")
 
                     self.usedWords.append(self.lstG[self.z])
 
@@ -380,35 +401,62 @@ class revision():
 
                 if self.rand == 0:
                     userAnswer = input(f"{self.lstG[self.z]} = ")
+                    
+                    if userAnswer == "q":
+                        self.menu = "y"
+                        return self.quit
+                    else:
+                        self.quit = ""
+                    
                     if userAnswer == self.lstF[self.z]:
                         print("Oui!\n")
                     else:
-                        print(f"Not! C'est {self.lstF[self.z]}\n")
+                        print(f"Not! C'est \"{self.lstF[self.z]}\"\n")
 
                 elif self.rand == 1 and self.toGerman:
                     userAnswer = input(f"{self.lstF[self.z]} = ")
+                    
+                    if userAnswer == "q":
+                        self.menu = "y"
+                        return self.quit
+                    else:
+                        self.quit = ""
+                    
                     if userAnswer == self.lstG[self.z]:
                         print("Oui!\n")
                     else:
-                        print(f"Non! C'est {self.lstG[self.z]}\n")
+                        print(f"Non! C'est \"{self.lstG[self.z]}\"\n")
 
     def run_translate(self):
+        userTranslate = ""
+        
+        while userTranslate != "q":
+            
+            for i in range(self.lenG):
+                print(f"\nMot Allemand numero {i+1:2}: \"{self.lstG[i]}\"", end="")
 
-        for i in range(self.lenG):
-            print(f"\nMot Allemand numero {i+1:2}: \"{self.lstG[i]}\"", end="")
+            userTranslate = input("\n\nMot Allemand : ")
+            
+            if userTranslate == "q":
+                self.menu = "y"
+                return self.menu
+            
+            notFound = 0
+            for i in range(self.lenG):
 
-        userTranslate = input("\n\nMot Allemand : ")
-        notFound = 0
-        for i in range(self.lenG):
+                if userTranslate == self.lstG[i]:
+                    notFound -= notFound
+                    print(f"\n{userTranslate} = {self.lstF[i]}\n")
+                    
+                    sleep(1)
+                    
+                    break
 
-            if userTranslate == self.lstG[i]:
-                notFound -= notFound
-                print(f"\n{userTranslate} = {self.lstF[i]}\n")
-                break
-
-            notFound += 1
-        if notFound > 1:
-            print("\nMot introuvable")
-
+                notFound += 1
+            if notFound > 1:
+                print("\nMot introuvable")
+                
+        self.quit = "y"
+        return self.quit
 
 revision()
