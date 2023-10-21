@@ -1,7 +1,7 @@
 """
 Simulateur de jeu de 52 cartes
 
-Liam BERGE TG1 | 21/10/2023
+Liam BERGE TG1 | 21/10/2023 - Q5+Q6 Fini le 22/10/2023 à 00:33
 """
 from time import sleep
 from function import JeuDeCartes, Ui_MainWindow
@@ -197,7 +197,7 @@ jeux.nomCarte((12, 1))
 #print()
 #print(jeux.carte)
 
-#Q4.2 Tirage de toutes le cartes
+#Q4.2 Tirage de toutes le cartes : FAIT
 #jeux = JeuDeCartes()
 #jeux.battre()
 #
@@ -205,7 +205,7 @@ jeux.nomCarte((12, 1))
 #    c = jeux.tirer()
 
 """
-
+#Q5 : FAIT
 app = QApplication([])
 window = Window()
 
