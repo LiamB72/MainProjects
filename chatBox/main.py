@@ -46,6 +46,8 @@ class MainWindows(QMainWindow):
         self.removeSelectedButton.clicked.connect(self.rmSelRegUser)
         self.saveCurrentListButton.clicked.connect(self.saveCurrentRegUsers)
 
+        self.alreadyWarned = False
+        
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update)
         self.timer.start(100)
@@ -53,11 +55,12 @@ class MainWindows(QMainWindow):
         if len(receiverIPs) != 0 and len(receiverNames) != 0:
             self.receiverName_Input.setText(receiverNames[0])
             self.receiverIP_Input.setText(receiverIPs[0])
+        else:
+            self.receiverName = ""
 
         self.names_count = {}
 
         self.userList = self.registeredUserList
-        print(type(self.userList))
         self.userList.addItems(receiverNames)
 
     def update(self):
@@ -77,36 +80,32 @@ class MainWindows(QMainWindow):
             if server[0] == "127.0.0.1":
                 self.listWidget.insertItem(0, f"From This Computer : {message}")
 
-            elif registeredUsers[server[0]] != "":
-                self.listWidget.insertItem(
-                    0, f"[From {registeredUsers[server[0]]}] : {message}"
-                )
-
-            else:
+            if server[0] != "":
                 self.listWidget.insertItem(0, f"[From [Unknown User] : {message}")
-
+            
+            elif registeredUsers[server[0]] != "":
+                self.listWidget.insertItem(0, f"[From {registeredUsers[server[0]]}] : {message}")
+            
             self.listWidget.item(0).setForeground(QtCore.Qt.white)
 
     def sendButton(self):
 
         if self.receiverIP_Input.text().strip() != "":
-            receiverName = self.receiverName_Input.text().strip()
+            self.receiverName = self.receiverName_Input.text().strip()
             RECEIVER_IP = self.receiverIP_Input.text()
         else:
             RECEIVER_IP = "127.0.0.1"
-            receiverName = ""
+            self.receiverName = ""
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         message = self.yourMessage_Input.text().strip()
         data = message.encode("Utf8")
 
         if debugging:
-            print(
-                f"---\nMessage sent: \"{message}\" \nReceiver's IP: {RECEIVER_IP} ({receiverName}) \nReceiver's Port : {RECEIVER_PORT}"
-            )
+            print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {RECEIVER_IP} ({self.receiverName}) \nReceiver's Port : {RECEIVER_PORT}")
 
         sock.sendto(data, (RECEIVER_IP, RECEIVER_PORT))
-
+    
     def clearListWidget(self):
         self.listWidget.clear()
 
@@ -114,9 +113,7 @@ class MainWindows(QMainWindow):
 
         receiverName = self.receiverName_Input.text().strip()
         RECEIVER_IP = self.receiverIP_Input.text().strip()
-        if (receiverName != "" and RECEIVER_IP != "") or (
-            receiverName != "" or RECEIVER_IP != ""
-        ):
+        if (receiverName != "" and RECEIVER_IP != "") or (receiverName != "" or RECEIVER_IP != ""):
 
             if not (receiverName in receiverNames and RECEIVER_IP in receiverIPs):
 
@@ -174,7 +171,6 @@ class MainWindows(QMainWindow):
             file.write("{}")
 
     def rmSelRegUser(self):
-
         currentIndex = self.userList.currentIndex()
         
         if self.userList.count() != 0: # Checks if the QcomboBox is empty or not.
@@ -185,16 +181,21 @@ class MainWindows(QMainWindow):
             removedItem = items.pop(currentIndex)
             removedIP = receiverIPs.pop(currentIndex)
             removedName = receiverNames.pop(currentIndex)
-
-            self.yourMessage_Input.setPlaceholderText("If you wish to save the new list, press save current list button!")
+            
+            if not self.alreadyWarned:
+                warning = QMessageBox()
+                warning.setIcon(QMessageBox.Warning)
+                warning.setWindowTitle("Warning")
+                warning.setText("TO APPLY CHANGES,\nPRESS \"Save Current List\"")
+                warning.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                
+                warning.exec()
+                self.alreadyWarned = True
+            
         
             if debugging:
-                print(
-                    f"Removed Item: {removedItem} | Removed IP: {removedIP} | Removed Name: {removedName}\n\n----"
-                )
-                print(
-                    f"\nCurrent IPs  : {receiverIPs}\nCurrent Names: {receiverNames}\nCurrent Items: {items}"
-                )
+                print(f"Removed Item: {removedItem} | Removed IP: {removedIP} | Removed Name: {removedName}\n\n----")
+                print(f"\nCurrent IPs  : {receiverIPs}\nCurrent Names: {receiverNames}\nCurrent Items: {items}")
 
     def saveCurrentRegUsers(self):
 
