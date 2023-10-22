@@ -80,16 +80,16 @@ class MainWindows(QMainWindow):
             if server[0] == "127.0.0.1":
                 self.listWidget.insertItem(0, f"From This Computer : {message}")
 
-            if server[0] != "":
-                self.listWidget.insertItem(0, f"[From [Unknown User] : {message}")
             
-            elif registeredUsers[server[0]] != "":
+            if server[0] in registeredUsers :
                 self.listWidget.insertItem(0, f"[From {registeredUsers[server[0]]}] : {message}")
             
+            elif not (server[0] in registeredUsers):
+                self.listWidget.insertItem(0, f"[From [Unknown User] : {message}")
+
             self.listWidget.item(0).setForeground(QtCore.Qt.white)
 
     def sendButton(self):
-
         if self.receiverIP_Input.text().strip() != "":
             self.receiverName = self.receiverName_Input.text().strip()
             RECEIVER_IP = self.receiverIP_Input.text()
@@ -199,9 +199,11 @@ class MainWindows(QMainWindow):
 
     def saveCurrentRegUsers(self):
 
-        registeredUsers.clear()
         formatted_data = {ip: name for ip, name in items}
         registeredUsers.update(formatted_data)
+        file = open(file_path, "w")
+        json.dump(registeredUsers, file)
+        file.close()
 
     def closeEvent(self, event):
         self.closed.emit()
