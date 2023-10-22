@@ -236,7 +236,7 @@
      <number>2000</number>
     </property>
     <property name="placeholderText">
-     <string>PLACEHOLDER</string>
+     <string></string>
     </property>
    </widget>
    <widget class="QLabel" name="yourMessage_Text">
