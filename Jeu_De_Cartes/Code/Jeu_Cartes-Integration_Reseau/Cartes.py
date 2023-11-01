@@ -33,7 +33,7 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
         self.playerChosen = 0
         self.game_window = None
         self.game_window2 = None
-        self.debugging = True
+        self.debugging = False
         
         #if self.debugging:
         #    
@@ -55,6 +55,24 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
         elif self.radioButton_2.isChecked():
             self.playerChosen = 2
             self.game_window = playerWindow(self,2)
+            
+            
+        self.jeu = JeuDeCartes()
+        self.jeu.battre()
+        
+        self.paquetA = []
+        self.paquetB = []
+        
+        for i in range(0, round(len(self.jeu.carte)/2)):
+            self.paquetA.append(self.jeu.tirer())
+        
+        for i in range(0, round(len(self.jeu.carte)/2)):
+            self.paquetB.append(self.jeu.tirer())
+        
+        print(f"Cartes du jeu: {self.jeu.carte}")
+        print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
+        
+        message = ("",False,(self.jeu, self.paquetA, self.paquetB))
                 
 #        else:
 #            self.playerChosen = 1
@@ -109,49 +127,21 @@ class playerWindow(QMainWindow):
         #self.addCard.clicked.connect(self.addCardToDeck)
         #self.addCard.clicked.connect(self.addCardToDeck)
         self.cardWindow = None
-        
-        self.jeu = JeuDeCartes()
-        self.jeu.battre()
+              
         
         self.comptA = 0
         self.comptB = 0
-
-        if not self.debugging:
-            if self.player == 1:
-                self.paquetA = [] 
-                self.batailleA = []
-                
-                for i in range(0, round(len(self.jeu.carte)/2)):
-                    self.paquetA.append(self.jeu.tirer())
-            
-            
-            elif self.player == 2:
-                self.paquetB = []
-                self.batailleB = []
-                
-                for i in range(0, round(len(self.jeu.carte))):
-                    self.paquetB.append(self.jeu.tirer())
-        else:
-            self.paquetA = [] 
-            self.batailleA = []
-
-            for i in range(0, round(len(self.jeu.carte)/2)):
-                self.paquetA.append(self.jeu.tirer())
-                
-            self.paquetB = []
-            self.batailleB = []
-                
-            for i in range(0, round(len(self.jeu.carte))):
-                self.paquetB.append(self.jeu.tirer())
-        
-        print(f"Cartes du jeu: {self.jeu.carte}")
-        print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
                 
         self.ready1 = False
         self.ready2 = False
         
+        self.round = 1
+        
         self.chosenCardA = ()
         self.chosenCardB = ()
+        
+        self.batailleA = []
+        self.batailleB = []
         
         
     def update(self):
@@ -165,33 +155,37 @@ class playerWindow(QMainWindow):
             # and then a bool to tell that the party A or B is ready. And so that's why we use pickle, it's to "serialize" (transform into bytes)
             # the message sent with pickle.dumps(data), then loads the message's data with pickle.loads(data), to retrive the tuple and its content.
             self.message = pickle.loads(data)
-            
-            if self.player == 1:
-                if self.message[1]:
-                    self.ready2 = True
-                
-                #if self.debugging:
-                print("To Player1: ",self.message, " | ", type(self.message))
+            if self.message[2] == ():
+                if self.player == 1:
+                    if self.message[1]:
+                        self.ready2 = True
                     
-            elif self.player == 2:
-                if self.message[1]:
-                    self.ready1 = True
+                    #if self.debugging:
+                    print("To Player1: ",self.message, " | ", type(self.message))
+                        
+                elif self.player == 2:
+                    if self.message[1]:
+                        self.ready1 = True
+                        
+                    #if self.debugging:
+                    print("To Player2: ",self.message, " | ", type(self.message))
                     
-                #if self.debugging:
-                print("To Player2: ",self.message, " | ", type(self.message))
-                
-            self.applyChanges()
+                self.applyChanges()
+            else:
+                self.jeu = self.message[2][0]
+                self.paquetA = self.message[2][1]
+                self.paquetB = self.message[2][2]
             
     def sendMessage(self):
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
         if self.player == 1:
             self.ready1 = True
-            message = (self.currentCardA.text().strip(), self.ready1)
+            message = (self.currentCardA.text().strip(), self.ready1, ())
             self.sendingButtonA.setEnabled(False)
             
         elif self.player == 2:
             self.ready2 = True
-            message = (self.currentCardB.text().strip(), self.ready2)
+            message = (self.currentCardB.text().strip(), self.ready2, ())
             self.sendingButtonB.setEnabled(False)
         
         #data = message.encode("Utf8")
@@ -261,7 +255,7 @@ class playerWindow(QMainWindow):
     def runGame(self):
         indexA = 0
         indexB = 0
-        round = 1
+        
         carteJoueeA = ()
         carteJoueeB = ()
         roundWinner = ""
@@ -340,10 +334,10 @@ class playerWindow(QMainWindow):
         #        comptB += 1
         #        roundWinner = "Joueur 2"
                 
-        self.currentWinner.setText(f"Round {round} | WINNER : {roundWinner}")
+        self.currentWinner.setText(f"Round {self.round} | WINNER : {roundWinner}")
         self.scoreA.setText(f"Score: {self.comptA}")
         self.scoreB.setText(f"Score: {self.comptB}")
-        round += 1
+        self.round += 1
         sleep(1.4)
         if roundWinner == "Joueur 1":
             self.changeCurrentCardA(54,str(JeuDeCartes().nomCarte(carteJoueeA)),())
