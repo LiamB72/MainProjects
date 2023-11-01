@@ -54,33 +54,10 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
             
         elif self.radioButton_2.isChecked():
             self.playerChosen = 2
-            self.game_window = playerWindow(self,2)
-            
-            
-        
+            self.game_window = playerWindow(self,2)        
         
         if self.game_window:
             self.game_window.show()
-            if self.playerChosen == 1:
-                self.jeu = JeuDeCartes()
-                self.jeu.battre()
-
-                self.paquetA = []
-                self.paquetB = []
-
-                print(f"Cartes du jeu: {self.jeu.carte}")
-
-                for i in range(0, round(len(self.jeu.carte)/2)):
-                    self.paquetA.append(self.jeu.tirer())
-
-                for i in range(0, round(len(self.jeu.carte))):
-                    self.paquetB.append(self.jeu.tirer())
-
-                print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
-
-                message = ("",False,(self.jeu, self.paquetA, self.paquetB))
-                data = pickle.dumps(message)
-                self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
             
         self.close()
 
@@ -124,7 +101,31 @@ class playerWindow(QMainWindow):
         self.cardWindow = None
 
         if self.player == 1:
-            self.paquetA = start_menu.paquetA 
+
+            self.jeu = JeuDeCartes()
+            self.jeu.battre()
+
+            self.paquetA = []
+            self.paquetB = []
+
+            print(f"Cartes du jeu: {self.jeu.carte}")
+
+            for i in range(0, round(len(self.jeu.carte)/2)):
+                self.paquetA.append(self.jeu.tirer())
+
+            for i in range(0, round(len(self.jeu.carte))):
+                self.paquetB.append(self.jeu.tirer())
+
+            print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
+
+            tempSock = self.sock
+            tempSock.connect((self.RECEIVER_IP, self.RECEIVER_PORT))
+            
+            data = ("", False, (self.jeu, self.paquetB))
+            octets = pickle.dumps(data)
+            tempSock.send(octets)
+            tempSock.close()
+            
             self.comptA = 0
             self.batailleA = []
             self.chosenCardA = ()
