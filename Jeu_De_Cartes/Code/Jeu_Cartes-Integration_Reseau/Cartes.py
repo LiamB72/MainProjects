@@ -34,20 +34,11 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
         self.game_window = None
         self.game_window2 = None
         self.debugging = False
-        
-        #if self.debugging:
-        #    
-        #    self.radioButton.setEnabled(False)
-        #    self.radioButton_2.setEnabled(False)
     
     def startGame(self):
-        #if not self.debugging:
         self.RECEIVER_IP = self.lineEdit.text().strip()
-        #else:
-        #    self.RECEIVER_IP = self.SENDER_IP
         self.RECEIVER_PORT = 5000
         
-#        if not self.debugging:
         if self.radioButton.isChecked():
             self.playerChosen = 1
             self.game_window = playerWindow(self,1)
@@ -55,6 +46,8 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
         elif self.radioButton_2.isChecked():
             self.playerChosen = 2
             self.game_window = playerWindow(self,2)        
+        
+        print(type(self.sock), self.RECEIVER_IP, self.SENDER_IP)
         
         if self.game_window:
             self.game_window.show()
@@ -64,8 +57,7 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
 class playerWindow(QMainWindow):
     
     def __init__(self, start_menu:startMenu, player:int):      
-        super(playerWindow, self).__init__()
-        
+        super().__init__()
         self.player = player
         
         # Loads the ui according to which of the two ratio buttons have been selected 
@@ -81,7 +73,9 @@ class playerWindow(QMainWindow):
         self.SENDER_PORT = start_menu.SENDER_PORT
         self.RECEIVER_IP = start_menu.RECEIVER_IP
         self.RECEIVER_PORT = start_menu.RECEIVER_PORT
+        
         self.sock = start_menu.sock
+        print(type(self.sock))
         self.debugging = start_menu.debugging
         
         self.IP_RECEVEUR_LABEL.setText("Leur IP: "+self.RECEIVER_IP)
@@ -153,7 +147,7 @@ class playerWindow(QMainWindow):
             # the message sent with pickle.dumps(data), then loads the message's data with pickle.loads(data), to retrive the tuple and its content.
             self.message = pickle.loads(data)
             
-            print(self.message[0],self.message[1],self.message[2],"\n\n\n",self.message)
+            print(self.message)
             
             if self.message[2] == ():
                 if self.player == 1:
@@ -191,12 +185,13 @@ class playerWindow(QMainWindow):
         #data = message.encode("Utf8")
         # As stated previously in update, the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
         # So we use pickle.dumps to transform the tuple into bytes and then send them tot he receiver's IP.
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         data = pickle.dumps(message)
-
+        
         if self.debugging:
             print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
-
-        self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
+        print(type(self.sock))
+        sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
         
         self.applyChanges()
         
@@ -369,7 +364,7 @@ class cardWindow(QWidget):
         
         if lenghtDeck != 0:
             for i in range(0, lenghtDeck):
-                print(deck[i])
+                #print(deck[i])
             
                 button = QPushButton()
                 button.clicked.connect(partial(self.button_clicked, main_window))
