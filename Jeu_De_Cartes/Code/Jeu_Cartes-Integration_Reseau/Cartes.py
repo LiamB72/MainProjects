@@ -330,11 +330,11 @@ class playerWindow(QMainWindow):
         round += 1
         sleep(.7)
         if roundWinner == "Joueur 1":
-            self.changeCurrentCardA(54,carteJoueeA,())
+            self.changeCurrentCardA(54,str(JeuDeCartes.nomCarte(carteJoueeA)),())
             self.changeCurrentCardB(54,"",())
         if roundWinner == "Joueur 2":
             self.changeCurrentCardA(54,"",())
-            self.changeCurrentCardB(54,carteJoueeB,())
+            self.changeCurrentCardB(54,str(JeuDeCartes.nomCarte(carteJoueeB)),())
 
 
 class cardWindow(QWidget):
