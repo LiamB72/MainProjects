@@ -189,13 +189,12 @@ class playerWindow(QMainWindow):
         if self.player == 1:
             self.ready1 = True
             message = (self.currentCardA.text().strip(), self.ready1)
+            self.sendingButtonA.setEnabled(False)
             
         elif self.player == 2:
             self.ready2 = True
             message = (self.currentCardB.text().strip(), self.ready2)
-        
-        self.sendingButtonA.setEnabled(False)
-        self.sendingButtonB.setEnabled(False)
+            self.sendingButtonB.setEnabled(False)
         
         #data = message.encode("Utf8")
         # As stated previously in update, the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
