@@ -63,7 +63,7 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
 
 class playerWindow(QMainWindow):
     
-    def __init__(self, start_menu, player):      
+    def __init__(self, start_menu:startMenu, player:int):      
         super(playerWindow, self).__init__()
         
         self.player = player
@@ -348,7 +348,7 @@ class playerWindow(QMainWindow):
 
 
 class cardWindow(QWidget):
-    def __init__(self, main_window, deck):
+    def __init__(self, main_window:playerWindow, deck:list):
         
         super().__init__()
 
