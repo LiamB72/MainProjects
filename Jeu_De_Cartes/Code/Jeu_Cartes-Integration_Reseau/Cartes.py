@@ -1,7 +1,7 @@
 """
 Simulateur de jeu de 52 cartes
 
-Liam BERGE TG1 | 21/10/2023
+Liam BERGE TG1 | Started On: 21/10/2023 | Lastest Edit: 11/01/2023
 """
 
 from modulesFunction import JeuDeCartes, Ui_MainWindow_StartMenu
