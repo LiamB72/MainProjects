@@ -78,6 +78,8 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
 
 class playerWindow(QMainWindow):
     
+    ready_counter = 0
+    
     def __init__(self, start_menu, player):      
         super(playerWindow, self).__init__()
         
@@ -144,7 +146,6 @@ class playerWindow(QMainWindow):
             message = data.decode()
             # message = pickle.loads(data) <--- Used when a tuple was sent.
             if self.player == 1:
-                print("To Player1: ",message, " | ", type(message))
             
                 for key, values in JeuDeCartes().images.items():
                     if str(JeuDeCartes().nomCarte(key)) == message:
@@ -169,12 +170,13 @@ class playerWindow(QMainWindow):
         elif self.player == 2:
             message = self.currentCardB.text().strip()
             
-        self.ready_counter += 1
-        
-        if self.ready_counter == 2:
+        self.__class__.ready_counter += 1
+        print(self.__class__.ready_counter)
+
+        if self.__class__.ready_counter == 2:
             self.sendingButton.setEnabled(True)
             self.showPossibleCards.setEnabled(True)
-            self.ready_counter = 0
+            self.__class__.ready_counter = 0
         
         data = message.encode("Utf8")
         # data = pickle.dumps(message) <---- used when the message sent was a tuple.
