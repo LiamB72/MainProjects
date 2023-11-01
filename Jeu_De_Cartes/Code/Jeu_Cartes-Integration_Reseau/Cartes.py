@@ -146,21 +146,23 @@ class playerWindow(QMainWindow):
             # The message is now a tuple that tells which card is played by the other party (which is btw a string and not a another tuple),
             # and then a bool to tell that the party A or B is ready. And so that's why we use pickle, it's to "serialize" (transform into bytes)
             # the message sent with pickle.dumps(data), then loads the message's data with pickle.loads(data), to retrive the tuple and its content.
-            message = pickle.loads(data)
+            self.message = pickle.loads(data)
             
             if self.player == 1:
-                if message[1]:
+                if self.message[1]:
                     self.ready2 = True
                 
                 #if self.debugging:
-                print("To Player1: ",message, " | ", type(message))
+                print("To Player1: ",self.message, " | ", type(self.message))
                     
             elif self.player == 2:
-                if message[1]:
+                if self.message[1]:
                     self.ready1 = True
                     
                 #if self.debugging:
-                print("To Player2: ",message, " | ", type(message))
+                print("To Player2: ",self.message, " | ", type(self.message))
+                
+            self.applyChanges()
             
     def sendMessage(self):
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
@@ -184,25 +186,7 @@ class playerWindow(QMainWindow):
 
         self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
         
-        if self.ready1 and self.ready2:
-                
-                if self.player == 1:
-            
-                    for key,_ in JeuDeCartes().images.items():
-                        if str(JeuDeCartes().nomCarte(key)) == message[0]:
-                            self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-                            
-                    self.sendingButtonA.setEnabled(True)
-                    
-                elif self.player == 2:
-
-                    for key,_ in JeuDeCartes().images.items():
-                        if str(JeuDeCartes().nomCarte(key)) == message[0]:
-                            self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-                            
-                    self.sendingButtonB.setEnabled(True)
-
-                self.ready1, self.ready2 = False, False
+        self.applyChanges()
         
     def showCards(self):
         # Shows a window, within is shown the player's current card that they earn during the game.
@@ -230,6 +214,28 @@ class playerWindow(QMainWindow):
         # Changes the card's Pixel Map (It's Image) with a given Path
         self.carteChoisieB.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameB)+".png"))
         self.currentCardB.setText(newCard)
+        
+    def applyChanges(self):
+        
+        if self.ready1 and self.ready2:
+                
+                if self.player == 1:
+            
+                    for key,_ in JeuDeCartes().images.items():
+                        if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
+                            self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                            
+                    self.sendingButtonA.setEnabled(True)
+                    
+                elif self.player == 2:
+
+                    for key,_ in JeuDeCartes().images.items():
+                        if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
+                            self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                            
+                    self.sendingButtonB.setEnabled(True)
+
+                self.ready1, self.ready2 = False, False
 
 
 class cardWindow(QWidget):
