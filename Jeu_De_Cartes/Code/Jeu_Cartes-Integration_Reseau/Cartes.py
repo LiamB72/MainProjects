@@ -35,41 +35,40 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
         self.game_window2 = None
         self.debugging = False
         
-        if self.debugging:
-            
-            self.radioButton.setEnabled(False)
-            self.radioButton_2.setEnabled(False)
+        #if self.debugging:
+        #    
+        #    self.radioButton.setEnabled(False)
+        #    self.radioButton_2.setEnabled(False)
     
     def startGame(self):
-        if not self.debugging:
-            self.RECEIVER_IP = self.lineEdit.text().strip()
-        else:
-            self.RECEIVER_IP = self.SENDER_IP
+        #if not self.debugging:
+        self.RECEIVER_IP = self.lineEdit.text().strip()
+        #else:
+        #    self.RECEIVER_IP = self.SENDER_IP
         self.RECEIVER_PORT = 5000
         
-        if not self.debugging:
-            if self.radioButton.isChecked():
-
-                self.playerChosen = 1
-                self.game_window = playerWindow(self,1)
-
-            elif self.radioButton_2.isChecked():
-
-                self.playerChosen = 2
-                self.game_window = playerWindow(self,2)
-                
-        else:
+#        if not self.debugging:
+        if self.radioButton.isChecked():
             self.playerChosen = 1
             self.game_window = playerWindow(self,1)
-            self.game_window2 = playerWindow(self,2)
-        
-        if self.debugging:
-            if self.game_window and self.game_window2:
-                self.game_window.show()
-                self.game_window2.show()
-        elif not self.debugging:
-            if self.game_window:
-                self.game_window.show()
+            
+        elif self.radioButton_2.isChecked():
+            self.playerChosen = 2
+            self.game_window = playerWindow(self,2)
+                
+#        else:
+#            self.playerChosen = 1
+#            self.game_window = playerWindow(self,1)
+#            self.game_window2 = playerWindow(self,2)
+#        
+#        if self.debugging:
+#            if self.game_window and self.game_window2:
+#                self.game_window.show()
+#                self.game_window2.show()
+#        elif not self.debugging:
+        if self.game_window:
+            self.game_window.show()
+            
         self.close()
 
 class playerWindow(QMainWindow):
@@ -117,18 +116,31 @@ class playerWindow(QMainWindow):
         self.comptA = 0
         self.comptB = 0
 
-        if self.player == 1:
+        if not self.debbugging:
+            if self.player == 1:
+                self.paquetA = [] 
+                self.batailleA = []
+                
+                for i in range(0, round(len(self.jeu.carte)/2)):
+                    self.paquetA.append(self.jeu.tirer())
+            
+            
+            elif self.player == 2:
+                self.paquetB = []
+                self.batailleB = []
+                
+                for i in range(0, round(len(self.jeu.carte))):
+                    self.paquetB.append(self.jeu.tirer())
+        else:
             self.paquetA = [] 
             self.batailleA = []
-            
+
             for i in range(0, round(len(self.jeu.carte)/2)):
                 self.paquetA.append(self.jeu.tirer())
-        
-        
-        elif self.player == 2:
+                
             self.paquetB = []
             self.batailleB = []
-            
+                
             for i in range(0, round(len(self.jeu.carte))):
                 self.paquetB.append(self.jeu.tirer())
         
