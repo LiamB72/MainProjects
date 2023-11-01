@@ -149,31 +149,34 @@ class playerWindow(QMainWindow):
                     self.ready2 = True
                 
                 #if self.debugging:
-                    print("To Player1: ",message, " | ", type(message))
+                print("To Player1: ",message, " | ", type(message))
                     
             elif self.player == 2:
                 if message[1]:
                     self.ready1 = True
                     
                 #if self.debugging:
-                    print("To Player2: ",message, " | ", type(message))
+                print("To Player2: ",message, " | ", type(message))
                     
             if self.ready1 and self.ready2:
-                self.sendingButton.setEnabled(True)
-                self.showPossibleCards.setEnabled(True)
-                self.ready1, self.ready2 = False, False
                 
                 if self.player == 1:
             
-                    for key, values in JeuDeCartes().images.items():
+                    for key,_ in JeuDeCartes().images.items():
                         if str(JeuDeCartes().nomCarte(key)) == message[0]:
                             self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
                 
                 elif self.player == 2:
 
-                    for key, values in JeuDeCartes().images.items():
+                    for key,_ in JeuDeCartes().images.items():
                         if str(JeuDeCartes().nomCarte(key)) == message[0]:
                             self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                
+                self.sendingButtonA.setEnabled(True)
+                self.sendingButtonB.setEnabled(True)
+                self.showPossibleCardsA.setEnabled(True)
+                self.showPossibleCardsB.setEnabled(True)
+                self.ready1, self.ready2 = False, False
                 
                     
             
@@ -182,14 +185,16 @@ class playerWindow(QMainWindow):
         if self.player == 1:
             self.ready1 = True
             message = (self.currentCardA.text().strip(), self.ready1)
-            self.sendingButton.setEnabled(False)
-            self.showPossibleCards.setEnabled(False)
+            
         elif self.player == 2:
             self.ready2 = True
             message = (self.currentCardB.text().strip(), self.ready2)
-            self.sendingButton.setEnabled(False)
-            self.showPossibleCards.setEnabled(False)
-            
+        
+        self.sendingButtonA.setEnabled(False)
+        self.sendingButtonB.setEnabled(False)
+        self.showPossibleCardsA.setEnabled(False)
+        self.showPossibleCardsB.setEnabled(False)
+        
         #data = message.encode("Utf8")
         # As stated previously in update, the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
         # So we use pickle.dumps to transform the tuple into bytes and then send them tot he receiver's IP.
