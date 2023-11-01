@@ -45,9 +45,7 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
             
         elif self.radioButton_2.isChecked():
             self.playerChosen = 2
-            self.game_window = playerWindow(self,2)        
-        
-        print(type(self.sock), self.RECEIVER_IP, self.SENDER_IP)
+            self.game_window = playerWindow(self,2)
         
         if self.game_window:
             self.game_window.show()
@@ -75,7 +73,6 @@ class playerWindow(QMainWindow):
         self.RECEIVER_PORT = start_menu.RECEIVER_PORT
         
         self.sock = start_menu.sock
-        print(type(self.sock))
         self.debugging = start_menu.debugging
         
         self.IP_RECEVEUR_LABEL.setText("Leur IP: "+self.RECEIVER_IP)
@@ -102,7 +99,8 @@ class playerWindow(QMainWindow):
             self.paquetA = []
             self.paquetB = []
 
-            print(f"Cartes du jeu: {self.jeu.carte}")
+            if self.debugging:
+                print(f"Cartes du jeu: {self.jeu.carte}")
 
             for i in range(0, round(len(self.jeu.carte)/2)):
                 self.paquetA.append(self.jeu.tirer())
@@ -110,7 +108,8 @@ class playerWindow(QMainWindow):
             for i in range(0, round(len(self.jeu.carte))):
                 self.paquetB.append(self.jeu.tirer())
 
-            print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
+            if self.debugging:
+                print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
 
             tempSock = self.sock
             tempSock.connect((self.RECEIVER_IP, self.RECEIVER_PORT))
@@ -154,15 +153,15 @@ class playerWindow(QMainWindow):
                     if self.message[1]:
                         self.ready2 = True
                     
-                    #if self.debugging:
-                    print("To Player1: ",self.message, " | ", type(self.message))
+                    if self.debugging:
+                        print("To Player1: ",self.message, " | ", type(self.message))
                         
                 elif self.player == 2:
                     if self.message[1]:
                         self.ready1 = True
                         
-                    #if self.debugging:
-                    print("To Player2: ",self.message, " | ", type(self.message))
+                    if self.debugging:
+                        print("To Player2: ",self.message, " | ", type(self.message))
                     
                 self.applyChanges()
             elif  self.message[2] != () and self.player == 2:
@@ -189,11 +188,11 @@ class playerWindow(QMainWindow):
         data = pickle.dumps(message)
         
         if self.debugging:
-            print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
-        print(type(self.sock))
+            (f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
         sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
         
         self.applyChanges()
+        
         
     def showCards(self):
         # Shows a window, within is shown the player's current card that they earn during the game.
