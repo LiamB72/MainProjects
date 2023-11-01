@@ -135,6 +135,9 @@ class playerWindow(QMainWindow):
         self.ready1 = False
         self.ready2 = False
         
+        self.chosenCardA = ()
+        self.chosenCardB = ()
+        
         
     def update(self):
         try:
@@ -205,15 +208,17 @@ class playerWindow(QMainWindow):
         elif self.player == 2:
             self.paquetB.append((randint(0,12),randint(0,3)))
         
-    def changeCurrentCardA(self, imagePathNameA, newCard):
+    def changeCurrentCardA(self, imagePathNameA, newCard, data):
         # Changes the card's Pixel Map (It's Image) with a given Path
         self.carteChoisieA.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameA)+".png"))
         self.currentCardA.setText(newCard)
+        self.chosenCardA = data
         
-    def changeCurrentCardB(self, imagePathNameB, newCard):
+    def changeCurrentCardB(self, imagePathNameB, newCard, data):
         # Changes the card's Pixel Map (It's Image) with a given Path
         self.carteChoisieB.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameB)+".png"))
         self.currentCardB.setText(newCard)
+        self.chosenCardB = data
         
     def applyChanges(self):
         
@@ -245,20 +250,26 @@ class playerWindow(QMainWindow):
         
         round = 1
         
-        for key in self.paquetA:
-            if str(JeuDeCartes().nomCarte(key)) == self.currentCardA.text().strip():
-                carteJoueeA = key
-                indexA = index
-                
-            index += 1
+        if self.player == 1:
+            carteJoueeA = self.chosenCardA
             
-        for key in self.paquetB:
-            if str(JeuDeCartes().nomCarte(key)) == self.currentCardB.text().strip():
-                carteJoueeB = key
-                indexB = index
+            for key in self.paquetB:
+                if str(JeuDeCartes().nomCarte(key)) == self.currentCardB.text().strip():
+                    carteJoueeB = key
+                    indexB = index
+
+                index += 1
+        elif self.player == 2:
+            carteJoueeB = self.chosenCardB
             
-            index += 1
-                
+            for key in self.paquetA:
+                if str(JeuDeCartes().nomCarte(key)) == self.currentCardA.text().strip():
+                    carteJoueeA = key
+                    indexA = index
+
+                index += 1
+        
+        print(carteJoueeA, carteJoueeB)
         print(indexA, indexB)
         
         if carteJoueeA[0] > carteJoueeB[0]:
@@ -363,9 +374,11 @@ class cardWindow(QWidget):
             data = sender.my_data
             
             if main_window.player == 1:
-                main_window.changeCurrentCardA(JeuDeCartes().images[data], JeuDeCartes().nomCarte(data))
+                main_window.changeCurrentCardA(JeuDeCartes().images[data], JeuDeCartes().nomCarte(data), data)
+
             elif main_window.player == 2:
-                main_window.changeCurrentCardB(JeuDeCartes().images[data], JeuDeCartes().nomCarte(data))
+                main_window.changeCurrentCardB(JeuDeCartes().images[data], JeuDeCartes().nomCarte(data), data)
+                
             if main_window.debugging:
                 print(f"Button clicked with data: {data} | Nom de Carte: {JeuDeCartes().nomCarte(data)}")
         self.close()
