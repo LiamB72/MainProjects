@@ -57,38 +57,30 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
             self.game_window = playerWindow(self,2)
             
             
-        if self.playerChosen == 1:
-            self.jeu = JeuDeCartes()
-            self.jeu.battre()
-            
-            self.paquetA = []
-            self.paquetB = []
-            
-            print(f"Cartes du jeu: {self.jeu.carte}")
-            
-            for i in range(0, round(len(self.jeu.carte)/2)):
-                self.paquetA.append(self.jeu.tirer())
-            
-            for i in range(0, round(len(self.jeu.carte))):
-                self.paquetB.append(self.jeu.tirer())
-            
-            print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
-            
-            message = ("",False,(self.jeu, self.paquetA, self.paquetB))
-            data = pickle.dumps(message)
-            self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
-#        else:
-#            self.playerChosen = 1
-#            self.game_window = playerWindow(self,1)
-#            self.game_window2 = playerWindow(self,2)
-#        
-#        if self.debugging:
-#            if self.game_window and self.game_window2:
-#                self.game_window.show()
-#                self.game_window2.show()
-#        elif not self.debugging:
+        
+        
         if self.game_window:
             self.game_window.show()
+            if self.playerChosen == 1:
+                self.jeu = JeuDeCartes()
+                self.jeu.battre()
+
+                self.paquetA = []
+                self.paquetB = []
+
+                print(f"Cartes du jeu: {self.jeu.carte}")
+
+                for i in range(0, round(len(self.jeu.carte)/2)):
+                    self.paquetA.append(self.jeu.tirer())
+
+                for i in range(0, round(len(self.jeu.carte))):
+                    self.paquetB.append(self.jeu.tirer())
+
+                print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
+
+                message = ("",False,(self.jeu, self.paquetA, self.paquetB))
+                data = pickle.dumps(message)
+                self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
             
         self.close()
 
@@ -131,15 +123,17 @@ class playerWindow(QMainWindow):
         #self.addCard.clicked.connect(self.addCardToDeck)
         self.cardWindow = None
 
-        self.comptA = 0
-        self.paquetA = []
-        self.batailleA = []
-        self.chosenCardA = ()
-                
-        self.comptB = 0
-        self.paquetB = []
-        self.batailleB = []
-        self.chosenCardB = ()
+        if self.player == 1:
+            self.paquetA = start_menu.paquetA 
+            self.comptA = 0
+            self.batailleA = []
+            self.chosenCardA = ()
+        
+        elif self.player == 2:
+            self.comptB = 0
+            self.paquetB = []
+            self.batailleB = []
+            self.chosenCardB = ()
         
         self.ready1 = False
         self.ready2 = False
@@ -157,6 +151,9 @@ class playerWindow(QMainWindow):
             # and then a bool to tell that the party A or B is ready. And so that's why we use pickle, it's to "serialize" (transform into bytes)
             # the message sent with pickle.dumps(data), then loads the message's data with pickle.loads(data), to retrive the tuple and its content.
             self.message = pickle.loads(data)
+            
+            print(self.message[0],self.message[1],self.message[2],"\n\n\n",self.message)
+            
             if self.message[2] == ():
                 if self.player == 1:
                     if self.message[1]:
