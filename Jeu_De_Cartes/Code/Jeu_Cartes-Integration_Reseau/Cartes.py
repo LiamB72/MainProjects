@@ -344,7 +344,7 @@ class playerWindow(QMainWindow):
         self.scoreA.setText(f"Score: {self.comptA}")
         self.scoreB.setText(f"Score: {self.comptB}")
         round += 1
-        sleep(.7)
+        sleep(1.4)
         if roundWinner == "Joueur 1":
             self.changeCurrentCardA(54,str(JeuDeCartes().nomCarte(carteJoueeA)),())
             self.changeCurrentCardB(54,"",())
@@ -375,6 +375,7 @@ class cardWindow(QWidget):
         
         if lenghtDeck != 0:
             for i in range(0, lenghtDeck):
+                print(deck[i])
             
                 button = QPushButton()
                 button.clicked.connect(partial(self.button_clicked, main_window))
