@@ -120,12 +120,12 @@ class playerWindow(QMainWindow):
 
             tempSock = self.sock
             tempSock.connect((self.RECEIVER_IP, self.RECEIVER_PORT))
-            
+
             data = ("", False, (self.jeu, self.paquetB))
             octets = pickle.dumps(data)
             tempSock.send(octets)
             tempSock.close()
-            
+
             self.comptA = 0
             self.batailleA = []
             self.chosenCardA = ()
