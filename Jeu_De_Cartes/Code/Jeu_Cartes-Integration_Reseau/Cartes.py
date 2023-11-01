@@ -115,23 +115,24 @@ class playerWindow(QMainWindow):
         self.jeu.battre()
         
         self.comptA = 0
-        self.paquetA = [] 
-        self.batailleA = []
-        
         self.comptB = 0
-        self.paquetB = []
-        self.batailleB = []
 
+        if self.player == 1:
+            self.paquetA = [] 
+            self.batailleA = []
+            
+            for i in range(0, round(len(self.jeu.carte)/2)):
+                self.paquetA.append(self.jeu.tirer())
+        
+        
+        elif self.player == 2:
+            self.paquetB = []
+            self.batailleB = []
+            
+            for i in range(0, round(len(self.jeu.carte))):
+                self.paquetB.append(self.jeu.tirer())
         
         print(f"Cartes du jeu: {self.jeu.carte}")
-        print(round(len(self.jeu.carte)/2))
-        for i in range(0, round(len(self.jeu.carte)/2)):
-            self.paquetA.append(self.jeu.tirer())
-        
-        for i in range(0, round(len(self.jeu.carte))):
-            self.paquetB.append(self.jeu.tirer())
-
-        
         print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
                 
         self.ready1 = False
