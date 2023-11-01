@@ -147,7 +147,7 @@ class playerWindow(QMainWindow):
             # the message sent with pickle.dumps(data), then loads the message's data with pickle.loads(data), to retrive the tuple and its content.
             self.message = pickle.loads(data)
             
-            print(self.message)
+            #print(self.message)
             
             if self.message[2] == ():
                 if self.player == 1:
