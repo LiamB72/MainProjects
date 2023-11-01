@@ -206,6 +206,18 @@ class playerWindow(QMainWindow):
 
         self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
         
+        if self.ready1 and self.ready2:
+                
+            if self.player == 1:
+                        
+                self.sendingButtonA.setEnabled(True)
+                
+            elif self.player == 2:
+                        
+                self.sendingButtonB.setEnabled(True)
+
+            self.ready1, self.ready2 = False, False
+        
     def showCards(self):
         # Shows a window, within is shown the player's current card that they earn during the game.
         if self.player == 1:
