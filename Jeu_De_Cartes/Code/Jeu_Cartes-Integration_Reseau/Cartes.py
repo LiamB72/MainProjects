@@ -161,28 +161,6 @@ class playerWindow(QMainWindow):
                     
                 #if self.debugging:
                 print("To Player2: ",message, " | ", type(message))
-                    
-            if self.ready1 and self.ready2:
-                
-                if self.player == 1:
-            
-                    for key,_ in JeuDeCartes().images.items():
-                        if str(JeuDeCartes().nomCarte(key)) == message[0]:
-                            self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-                            
-                    self.sendingButtonA.setEnabled(True)
-                    
-                elif self.player == 2:
-
-                    for key,_ in JeuDeCartes().images.items():
-                        if str(JeuDeCartes().nomCarte(key)) == message[0]:
-                            self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-                            
-                    self.sendingButtonB.setEnabled(True)
-
-                self.ready1, self.ready2 = False, False
-                
-                    
             
     def sendMessage(self):
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
@@ -208,15 +186,23 @@ class playerWindow(QMainWindow):
         
         if self.ready1 and self.ready2:
                 
-            if self.player == 1:
-                        
-                self.sendingButtonA.setEnabled(True)
-                
-            elif self.player == 2:
-                        
-                self.sendingButtonB.setEnabled(True)
+                if self.player == 1:
+            
+                    for key,_ in JeuDeCartes().images.items():
+                        if str(JeuDeCartes().nomCarte(key)) == message[0]:
+                            self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                            
+                    self.sendingButtonA.setEnabled(True)
+                    
+                elif self.player == 2:
 
-            self.ready1, self.ready2 = False, False
+                    for key,_ in JeuDeCartes().images.items():
+                        if str(JeuDeCartes().nomCarte(key)) == message[0]:
+                            self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                            
+                    self.sendingButtonB.setEnabled(True)
+
+                self.ready1, self.ready2 = False, False
         
     def showCards(self):
         # Shows a window, within is shown the player's current card that they earn during the game.
