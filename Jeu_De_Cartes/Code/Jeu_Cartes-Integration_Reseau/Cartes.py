@@ -244,7 +244,6 @@ class playerWindow(QMainWindow):
             self.runGame()
     
     def runGame(self):
-        index = 0
         indexA = 0
         indexB = 0
         round = 1
@@ -256,7 +255,9 @@ class playerWindow(QMainWindow):
             
             for key,_ in JeuDeCartes().images.items():
                     if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
-                        carteJoueeB = JeuDeCartes().images[key]
+                        carteJoueeB = key
+            
+            indexA = self.paquetA.index(carteJoueeA)
             
         elif self.player == 2:
             
@@ -264,7 +265,9 @@ class playerWindow(QMainWindow):
             
             for key,_ in JeuDeCartes().images.items():
                     if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
-                        carteJoueeA = JeuDeCartes().images[key]
+                        carteJoueeA = key
+                        
+            indexB = self.paquetB.index(carteJoueeB)
         
         print(carteJoueeA, carteJoueeB)
         print(indexA, indexB)
