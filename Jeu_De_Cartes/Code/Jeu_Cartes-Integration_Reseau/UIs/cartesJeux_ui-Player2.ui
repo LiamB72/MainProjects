@@ -181,7 +181,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>Resources/data/54.png</pixmap>
+      <pixmap>../../../Resources/data/54.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -298,7 +298,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap>Resources/data/54.png</pixmap>
+      <pixmap>../../../Resources/data/54.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
