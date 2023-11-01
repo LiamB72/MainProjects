@@ -97,14 +97,18 @@ class playerWindow(QMainWindow):
         
         self.IP_RECEVEUR_LABEL.setText("Leur IP: "+self.RECEIVER_IP)
         self.IP_SENDER_LABEL.setText("Votre IP: "+self.SENDER_IP)
-        self.sendingButton.clicked.connect(self.sendMessage)
+        if self.player == 1:
+            self.sendingButtonA.clicked.connect(self.sendMessage)
+        if self.player == 2:
+            self.sendingButtonB.clicked.connect(self.sendMessage)
         
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update)
         self.timer.start(100)
         
         self.showPossibleCards.clicked.connect(self.showCards)
-        self.addCard.clicked.connect(self.addCardToDeck)
+        #self.addCard.clicked.connect(self.addCardToDeck)
+        #self.addCard.clicked.connect(self.addCardToDeck)
         self.cardWindow = None
         
         self.jeu = JeuDeCartes()
@@ -165,17 +169,17 @@ class playerWindow(QMainWindow):
                     for key,_ in JeuDeCartes().images.items():
                         if str(JeuDeCartes().nomCarte(key)) == message[0]:
                             self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-                
+                            
+                    self.sendingButtonA.setEnabled(True)
+                    
                 elif self.player == 2:
 
                     for key,_ in JeuDeCartes().images.items():
                         if str(JeuDeCartes().nomCarte(key)) == message[0]:
                             self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-                
-                self.sendingButtonA.setEnabled(True)
-                self.sendingButtonB.setEnabled(True)
-                self.showPossibleCardsA.setEnabled(True)
-                self.showPossibleCardsB.setEnabled(True)
+                            
+                    self.sendingButtonB.setEnabled(True)
+
                 self.ready1, self.ready2 = False, False
                 
                     
@@ -192,8 +196,6 @@ class playerWindow(QMainWindow):
         
         self.sendingButtonA.setEnabled(False)
         self.sendingButtonB.setEnabled(False)
-        self.showPossibleCardsA.setEnabled(False)
-        self.showPossibleCardsB.setEnabled(False)
         
         #data = message.encode("Utf8")
         # As stated previously in update, the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
