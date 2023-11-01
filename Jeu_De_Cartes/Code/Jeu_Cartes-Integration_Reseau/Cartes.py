@@ -57,23 +57,23 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
             self.game_window = playerWindow(self,2)
             
             
-        self.jeu = JeuDeCartes()
-        self.jeu.battre()
-        
-        self.paquetA = []
-        self.paquetB = []
-        
-        print(f"Cartes du jeu: {self.jeu.carte}")
-        
-        for i in range(0, round(len(self.jeu.carte)/2)):
-            self.paquetA.append(self.jeu.tirer())
-        
-        for i in range(0, round(len(self.jeu.carte))):
-            self.paquetB.append(self.jeu.tirer())
-        
-        print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
-        
         if self.playerChosen == 1:
+            self.jeu = JeuDeCartes()
+            self.jeu.battre()
+            
+            self.paquetA = []
+            self.paquetB = []
+            
+            print(f"Cartes du jeu: {self.jeu.carte}")
+            
+            for i in range(0, round(len(self.jeu.carte)/2)):
+                self.paquetA.append(self.jeu.tirer())
+            
+            for i in range(0, round(len(self.jeu.carte))):
+                self.paquetB.append(self.jeu.tirer())
+            
+            print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
+            
             message = ("",False,(self.jeu, self.paquetA, self.paquetB))
             data = pickle.dumps(message)
             self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
