@@ -249,6 +249,7 @@ class playerWindow(QMainWindow):
         round = 1
         carteJoueeA = ()
         carteJoueeB = ()
+        roundWinner = ""
         
         if self.player == 1:
             carteJoueeA = self.chosenCardA
