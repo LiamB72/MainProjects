@@ -245,16 +245,21 @@ class playerWindow(QMainWindow):
         
         round = 1
         
-        for key,_ in JeuDeCartes().images.items():
+        for key in self.paquetA:
             if str(JeuDeCartes().nomCarte(key)) == self.currentCardA.text().strip():
                 carteJoueeA = key
                 indexA = index
+                
+            index += 1
+            
+        for key in self.paquetB:
             if str(JeuDeCartes().nomCarte(key)) == self.currentCardB.text().strip():
                 carteJoueeB = key
                 indexB = index
             
             index += 1
                 
+        print(indexA, indexB)
         
         if carteJoueeA[0] > carteJoueeB[0]:
                 
