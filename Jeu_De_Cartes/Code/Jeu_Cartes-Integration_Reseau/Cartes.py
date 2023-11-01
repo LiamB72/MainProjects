@@ -143,52 +143,57 @@ class playerWindow(QMainWindow):
             # and then a bool to tell that the party A or B is ready. And so that's why we use pickle, it's to "serialize" (transform into bytes)
             # the message sent with pickle.dumps(data), then loads the message's data with pickle.loads(data), to retrive the tuple and its content.
             message = pickle.loads(data)
-            if self.player == 1:
-                print("To Player1: ",message, " | ", type(message))
             
-                for key, values in JeuDeCartes().images.items():
-                    if str(JeuDeCartes().nomCarte(key)) == message[0]:
-                        self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-
+            if self.player == 1:
                 if message[1]:
                     self.ready2 = True
                 
-                if self.debugging:
+                #if self.debugging:
                     print("To Player1: ",message, " | ", type(message))
                     
             elif self.player == 2:
-
-                for key, values in JeuDeCartes().images.items():
-                    if str(JeuDeCartes().nomCarte(key)) == message[0]:
-                        self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-
                 if message[1]:
                     self.ready1 = True
                     
-                if self.debugging:
+                #if self.debugging:
                     print("To Player2: ",message, " | ", type(message))
                     
             if self.ready1 and self.ready2:
                 self.sendingButton.setEnabled(True)
                 self.showPossibleCards.setEnabled(True)
+                self.ready1, self.ready2 = False, False
+                
+                if self.player == 1:
+            
+                    for key, values in JeuDeCartes().images.items():
+                        if str(JeuDeCartes().nomCarte(key)) == message[0]:
+                            self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                
+                elif self.player == 2:
+
+                    for key, values in JeuDeCartes().images.items():
+                        if str(JeuDeCartes().nomCarte(key)) == message[0]:
+                            self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                
+                    
             
     def sendMessage(self):
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
         if self.player == 1:
             self.ready1 = True
             message = (self.currentCardA.text().strip(), self.ready1)
+            self.sendingButton.setEnabled(False)
+            self.showPossibleCards.setEnabled(False)
         elif self.player == 2:
             self.ready2 = True
             message = (self.currentCardB.text().strip(), self.ready2)
+            self.sendingButton.setEnabled(False)
+            self.showPossibleCards.setEnabled(False)
             
-        
         #data = message.encode("Utf8")
         # As stated previously in update, the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
         # So we use pickle.dumps to transform the tuple into bytes and then send them tot he receiver's IP.
-        
         data = pickle.dumps(message)
-        self.sendingButton.setEnabled(False)
-        self.showPossibleCards.setEnabled(False)
 
         if self.debugging:
             print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
