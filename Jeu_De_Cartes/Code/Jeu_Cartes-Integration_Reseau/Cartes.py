@@ -253,12 +253,18 @@ class playerWindow(QMainWindow):
         
         if self.player == 1:
             carteJoueeA = self.chosenCardA
-            carteJoueeB = self.message[0]
+            
+            for key,_ in JeuDeCartes().images.items():
+                    if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
+                        carteJoueeB = JeuDeCartes().images[key]
             
         elif self.player == 2:
             
             carteJoueeB = self.chosenCardB
-            carteJoueeA = self.message[0]
+            
+            for key,_ in JeuDeCartes().images.items():
+                    if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
+                        carteJoueeA = JeuDeCartes().images[key]
         
         print(carteJoueeA, carteJoueeB)
         print(indexA, indexB)
