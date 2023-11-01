@@ -173,8 +173,7 @@ class playerWindow(QMainWindow):
                 self.applyChanges()
             elif  self.message[2] != () and self.player == 2:
                 self.jeu = self.message[2][0]
-                self.paquetA = self.message[2][1]
-                self.paquetB = self.message[2][2]
+                self.paquetB = self.message[2][1]
                 print("You received the data required to play!")
             
     def sendMessage(self):
