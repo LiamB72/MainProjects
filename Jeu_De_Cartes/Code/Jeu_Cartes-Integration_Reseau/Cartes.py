@@ -219,23 +219,87 @@ class playerWindow(QMainWindow):
         
         if self.ready1 and self.ready2:
                 
-                if self.player == 1:
+            if self.player == 1:
+        
+                for key,_ in JeuDeCartes().images.items():
+                    if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
+                        self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                        
+                self.sendingButtonA.setEnabled(True)
+                
+            elif self.player == 2:
+                for key,_ in JeuDeCartes().images.items():
+                    if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
+                        self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                        
+                self.sendingButtonB.setEnabled(True)
+                
+            self.ready1, self.ready2 = False, False
             
-                    for key,_ in JeuDeCartes().images.items():
-                        if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
-                            self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-                            
-                    self.sendingButtonA.setEnabled(True)
-                    
-                elif self.player == 2:
-
-                    for key,_ in JeuDeCartes().images.items():
-                        if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
-                            self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-                            
-                    self.sendingButtonB.setEnabled(True)
-
-                self.ready1, self.ready2 = False, False
+            self.runGame()
+    
+    def runGame(self):
+        
+        carteJoueeA = [k for k, v in JeuDeCartes().images.items() if v == str(self.currentCardA.text().strip())]
+        carteJoueeB = [k for k, v in JeuDeCartes().images.items() if v == str(self.currentCardB.text().strip())]
+        
+        print(carteJoueeA, carteJoueeB)
+        
+        if carteJoueeA[0] > carteJoueeB[0]:
+                
+                self.paquetA.append(carteJoueeA)
+                self.paquetA.append(carteJoueeB)
+                comptA += 1
+                roundWinner = "Joueur 1"
+                
+        elif carteJoueeB[0] > carteJoueeA[0]:
+            
+            self.paquetB.append(carteJoueeA)
+            self.paquetB.append(carteJoueeB)
+            comptB += 1
+            roundWinner = "Joueur 2"
+            
+        #elif carteJoueeA[0] == carteJoueeB[0]:
+        #    
+        #    print("\n**************************\nBATAILLE!\n**************************")
+        #    
+        #    self.currentWinner.setText(f"Bataille !!!")
+        #    
+        #    batailleA.append(carteJoueeA)
+        #    batailleB.append(carteJoueeB)
+        #    
+        #    carteJoueeA = jeuA.tirer()
+        #    carteJoueeB = jeuB.tirer()             
+        #    
+        #    if carteJoueeA[0] > carteJoueeB[0]:
+        #    
+        #        packetA.append(carteJoueeA)
+        #        packetA.append(carteJoueeB)
+        #        packetA.append(batailleA[0])
+        #        packetA.append(batailleB[0])
+        #        
+        #        batailleA.clear()
+        #        batailleB.clear()
+        #        
+        #        comptA += 1
+        #        roundWinner = "Joueur 1"
+        #    elif carteJoueeB[0] > carteJoueeA[0]:
+        #        packetB.append(carteJoueeA)
+        #        packetB.append(carteJoueeB)
+        #        packetB.append(batailleA[0])
+        #        packetB.append(batailleB[0])
+        #        
+        #        batailleA.clear()
+        #        batailleB.clear()
+        #        
+        #        comptB += 1
+        #        roundWinner = "Joueur 2"
+                
+        print(f"\n{roundWinner} a remporté le pli\n")
+        print(f"\nLes scores sont:")
+        print(f"Joueur 1: {comptA} ------- Joueur 2: {comptB}\n")
+        self.scoreA.setText(f"Score: {comptA}")
+        self.scoreB.setText(f"Score: {comptB}")
 
 
 class cardWindow(QWidget):
