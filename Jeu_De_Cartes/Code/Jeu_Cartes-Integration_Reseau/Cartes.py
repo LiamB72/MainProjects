@@ -1,7 +1,7 @@
 """
 Simulateur de jeu de 52 cartes
 
-Liam BERGE TG1 | Started: 21/10/2023 | Latest Edit: 11/1/2023
+Liam BERGE TG1 | 21/10/2023
 """
 
 from modulesFunction import JeuDeCartes, Ui_MainWindow_StartMenu
@@ -41,7 +41,10 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
             self.radioButton_2.setEnabled(False)
     
     def startGame(self):
-        self.RECEIVER_IP = self.lineEdit.text().strip()
+        if not self.debugging:
+            self.RECEIVER_IP = self.lineEdit.text().strip()
+        else:
+            self.RECEIVER_IP = self.SENDER_IP
         self.RECEIVER_PORT = 5000
         
         if not self.debugging:
@@ -59,10 +62,6 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
             self.playerChosen = 1
             self.game_window = playerWindow(self,1)
             self.game_window2 = playerWindow(self,2)
-            
-        #message = str(self.playerChosen)
-        #data = message.encode("Utf8")
-        #self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
         
         if self.debugging:
             if self.game_window and self.game_window2:
@@ -109,7 +108,7 @@ class playerWindow(QMainWindow):
         self.timer.start(100)
         
         self.showPossibleCards.clicked.connect(self.showCards)
-        self.addCard.clicked.connect(self.addCardToDeck)
+        #self.addCard.clicked.connect(self.addCardToDeck)
         self.cardWindow = None
         
         self.jeu = JeuDeCartes()
@@ -122,7 +121,7 @@ class playerWindow(QMainWindow):
         self.comptB = 0
         self.paquetB = []
         self.batailleB = []
-        # 192.168.1.202
+
         if self.debugging:
             print(f"Cartes du jeu: {self.jeu.carte}")
             
@@ -133,8 +132,7 @@ class playerWindow(QMainWindow):
         if self.debugging:
             print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
                 
-        self.ready1 = False
-        self.ready2 = False
+        self.ready_counter = 0
         
         
     def update(self):
@@ -143,21 +141,14 @@ class playerWindow(QMainWindow):
         except socket.error as msg:
             data = None
         if data != None:
-            #message = data.decode()
-            # The message is now a tuple that tells which card is played by the other party (which is btw a string and not a another tuple),
-            # and then a bool to tell that the party A or B is ready. And so that's why we use pickle, it's to "serialize" (transform into bytes)
-            # the message sent with pickle.dumps(data), then loads the message's data with pickle.loads(data), to retrive the tuple and its content.
-            message = pickle.loads(data)
+            message = data.decode()
+            # message = pickle.loads(data) <--- Used when a tuple was sent.
             if self.player == 1:
                 print("To Player1: ",message, " | ", type(message))
             
                 for key, values in JeuDeCartes().images.items():
-                    if str(JeuDeCartes().nomCarte(key)) == message[0]:
+                    if str(JeuDeCartes().nomCarte(key)) == message:
                         self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
-
-                if message[1] == True or self.ready1:
-                    self.sendingButton.setEnabled(True)
-                    self.showPossibleCards.setEnabled(True)
                 
                 if self.debugging:
                     print("To Player1: ",message, " | ", type(message))
@@ -165,41 +156,35 @@ class playerWindow(QMainWindow):
             elif self.player == 2:
 
                 for key, values in JeuDeCartes().images.items():
-                    if str(JeuDeCartes().nomCarte(key)) == message[0]:
+                    if str(JeuDeCartes().nomCarte(key)) == message:
                         self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
 
-                if message[1] == True or self.ready2:
-                    self.sendingButton.setEnabled(True)
-                    self.showPossibleCards.setEnabled(True)
-                    
                 if self.debugging:
                     print("To Player2: ",message, " | ", type(message))
-                    
-            self.checkBothPlayersReady()
             
     def sendMessage(self):
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
         if self.player == 1:
-            self.ready1 = True
-            message = (self.currentCardA.text().strip(), self.ready1)
+            message = self.currentCardA.text().strip()
         elif self.player == 2:
-            self.ready2 = True
-            message = (self.currentCardB.text().strip(), self.ready2)
+            message = self.currentCardB.text().strip()
             
-        self.checkBothPlayersReady()
+        self.ready_counter += 1
         
-        #data = message.encode("Utf8")
-        # As stated previously in update, the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
-        # So we use pickle.dumps to transform the tuple into bytes and then send them tot he receiver's IP.
+        if self.ready_counter == 2:
+            self.sendingButton.setEnabled(True)
+            self.showPossibleCards.setEnabled(True)
+            self.ready_counter = 0
         
-        data = pickle.dumps(message)
-        self.sendingButton.setEnabled(False)
-        self.showPossibleCards.setEnabled(False)
+        data = message.encode("Utf8")
+        # data = pickle.dumps(message) <---- used when the message sent was a tuple.
 
         if self.debugging:
             print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
 
         self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
+        self.sendingButton.setEnabled(False)
+        self.showPossibleCards.setEnabled(False)
         
     def showCards(self):
         # Shows a window, within is shown the player's current card that they earn during the game.
@@ -211,12 +196,12 @@ class playerWindow(QMainWindow):
             
         self.cardWindow.show()
         
-    def addCardToDeck(self):
-        # Random Card Generator [ONLY FOR TEST PURPOSES]
-        if self.player == 1:
-            self.paquetA.append((randint(0,12),randint(0,3)))
-        elif self.player == 2:
-            self.paquetB.append((randint(0,12),randint(0,3)))
+    #def addCardToDeck(self):
+    #    # Random Card Generator [ONLY FOR TEST PURPOSES]
+    #    if self.player == 1:
+    #        self.paquetA.append((randint(0,12),randint(0,3)))
+    #    elif self.player == 2:
+    #        self.paquetB.append((randint(0,12),randint(0,3)))
         
     def changeCurrentCardA(self, imagePathNameA, newCard):
         # Changes the card's Pixel Map (It's Image) with a given Path
@@ -227,13 +212,6 @@ class playerWindow(QMainWindow):
         # Changes the card's Pixel Map (It's Image) with a given Path
         self.carteChoisieB.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameB)+".png"))
         self.currentCardB.setText(newCard)
-        
-    def checkBothPlayersReady(self):
-        
-        if self.ready1 and self.ready2:
-            
-            self.sendingButton.setEnabled(True)
-            self.showPossibleCards.setEnabled(True)
 
 
 class cardWindow(QWidget):
