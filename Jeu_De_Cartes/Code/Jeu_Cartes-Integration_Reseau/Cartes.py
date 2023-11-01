@@ -61,9 +61,6 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
             self.jeu = JeuDeCartes()
             self.jeu.battre()
             
-            self.paquetA = []
-            self.paquetB = []
-            
             print(f"Cartes du jeu: {self.jeu.carte}")
             
             for i in range(0, round(len(self.jeu.carte)/2)):
@@ -130,22 +127,21 @@ class playerWindow(QMainWindow):
         #self.addCard.clicked.connect(self.addCardToDeck)
         #self.addCard.clicked.connect(self.addCardToDeck)
         self.cardWindow = None
-              
-        
+
         self.comptA = 0
-        self.comptB = 0
+        self.paquetA = []
+        self.batailleA = []
+        self.chosenCardA = ()
                 
+        self.comptB = 0
+        self.paquetB = []
+        self.batailleB = []
+        self.chosenCardB = ()
+        
         self.ready1 = False
         self.ready2 = False
         
         self.round = 1
-        
-        self.chosenCardA = ()
-        self.chosenCardB = ()
-        
-        self.batailleA = []
-        self.batailleB = []
-        
         
     def update(self):
         try:
@@ -174,10 +170,11 @@ class playerWindow(QMainWindow):
                     print("To Player2: ",self.message, " | ", type(self.message))
                     
                 self.applyChanges()
-            else:
+            elif  self.message[2] != () and self.player == 2:
                 self.jeu = self.message[2][0]
                 self.paquetA = self.message[2][1]
                 self.paquetB = self.message[2][2]
+                print("You received the data required to play!")
             
     def sendMessage(self):
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
