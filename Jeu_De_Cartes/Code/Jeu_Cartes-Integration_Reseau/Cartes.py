@@ -33,7 +33,7 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
         self.playerChosen = 0
         self.game_window = None
         self.game_window2 = None
-        self.debugging = False
+        self.debugging = True
         
         #if self.debugging:
         #    
@@ -116,7 +116,7 @@ class playerWindow(QMainWindow):
         self.comptA = 0
         self.comptB = 0
 
-        if not self.debbugging:
+        if not self.debugging:
             if self.player == 1:
                 self.paquetA = [] 
                 self.batailleA = []
