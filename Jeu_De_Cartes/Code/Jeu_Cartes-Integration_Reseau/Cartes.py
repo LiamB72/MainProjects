@@ -73,9 +73,10 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
         
         print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
         
-        message = ("",False,(self.jeu, self.paquetA, self.paquetB))
-        data = pickle.dumps(message)
-        self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
+        if self.playerChosen == 1:
+            message = ("",False,(self.jeu, self.paquetA, self.paquetB))
+            data = pickle.dumps(message)
+            self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
 #        else:
 #            self.playerChosen = 1
 #            self.game_window = playerWindow(self,1)
