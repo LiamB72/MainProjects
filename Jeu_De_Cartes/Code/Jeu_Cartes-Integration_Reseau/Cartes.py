@@ -61,6 +61,9 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
             self.jeu = JeuDeCartes()
             self.jeu.battre()
             
+            self.paquetA = []
+            self.paquetB = []
+            
             print(f"Cartes du jeu: {self.jeu.carte}")
             
             for i in range(0, round(len(self.jeu.carte)/2)):
