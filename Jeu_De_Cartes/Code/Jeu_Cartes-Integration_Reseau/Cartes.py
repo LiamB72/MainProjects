@@ -228,14 +228,14 @@ class playerWindow(QMainWindow):
         
                 for key,_ in JeuDeCartes().images.items():
                     if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
-                        self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                        self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key), self.message[0])
                         
                 self.sendingButtonA.setEnabled(True)
                 
             elif self.player == 2:
                 for key,_ in JeuDeCartes().images.items():
                     if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
-                        self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key))
+                        self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key), self.message[0])
                         
                 self.sendingButtonB.setEnabled(True)
                 
@@ -247,42 +247,37 @@ class playerWindow(QMainWindow):
         index = 0
         indexA = 0
         indexB = 0
-        
         round = 1
+        carteJoueeA = ()
+        carteJoueeB = ()
         
         if self.player == 1:
             carteJoueeA = self.chosenCardA
+            carteJoueeB = self.message[0]
             
-            for key in self.paquetB:
-                if str(JeuDeCartes().nomCarte(key)) == self.currentCardB.text().strip():
-                    carteJoueeB = key
-                    indexB = index
-
-                index += 1
         elif self.player == 2:
-            carteJoueeB = self.chosenCardB
             
-            for key in self.paquetA:
-                if str(JeuDeCartes().nomCarte(key)) == self.currentCardA.text().strip():
-                    carteJoueeA = key
-                    indexA = index
-
-                index += 1
+            carteJoueeB = self.chosenCardB
+            carteJoueeA = self.message[0]
         
         print(carteJoueeA, carteJoueeB)
         print(indexA, indexB)
         
         if carteJoueeA[0] > carteJoueeB[0]:
                 
-            self.paquetB.pop(indexB)
-            self.paquetA.append(carteJoueeB)
+            if self.player == 2:
+                self.paquetB.pop(indexB)
+            if self.player == 1:
+                self.paquetA.append(carteJoueeB)
             self.comptA += 1
             roundWinner = "Joueur 1"
                 
         elif carteJoueeB[0] > carteJoueeA[0]:
             
-            self.paquetA.pop(indexA)
-            self.paquetB.append(carteJoueeB)
+            if self.player == 1:
+                self.paquetA.pop(indexA)
+            if self.player == 2:
+                self.paquetB.append(carteJoueeA)
             self.comptB += 1
             roundWinner = "Joueur 2"
             
