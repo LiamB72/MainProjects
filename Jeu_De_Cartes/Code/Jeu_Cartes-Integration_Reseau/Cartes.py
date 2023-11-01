@@ -239,24 +239,35 @@ class playerWindow(QMainWindow):
             self.runGame()
     
     def runGame(self):
+        index = 0
+        indexA = 0
+        indexB = 0
         
-        carteJoueeA = [k for k, v in JeuDeCartes().images.items() if v == str(self.currentCardA.text().strip())]
-        carteJoueeB = [k for k, v in JeuDeCartes().images.items() if v == str(self.currentCardB.text().strip())]
+        round = 1
         
-        print(carteJoueeA, carteJoueeB)
+        for key,_ in JeuDeCartes().images.items():
+            if str(JeuDeCartes().nomCarte(key)) == self.currentCardA.text().strip():
+                carteJoueeA = key
+                indexA = index
+            if str(JeuDeCartes().nomCarte(key)) == self.currentCardB.text().strip():
+                carteJoueeB = key
+                indexB = index
+            
+            index += 1
+                
         
         if carteJoueeA[0] > carteJoueeB[0]:
                 
-                self.paquetA.append(carteJoueeA)
-                self.paquetA.append(carteJoueeB)
-                comptA += 1
-                roundWinner = "Joueur 1"
+            self.paquetB.pop(indexB)
+            self.paquetA.append(carteJoueeB)
+            self.comptA += 1
+            roundWinner = "Joueur 1"
                 
         elif carteJoueeB[0] > carteJoueeA[0]:
             
-            self.paquetB.append(carteJoueeA)
+            self.paquetA.pop(indexA)
             self.paquetB.append(carteJoueeB)
-            comptB += 1
+            self.comptB += 1
             roundWinner = "Joueur 2"
             
         #elif carteJoueeA[0] == carteJoueeB[0]:
@@ -295,11 +306,9 @@ class playerWindow(QMainWindow):
         #        comptB += 1
         #        roundWinner = "Joueur 2"
                 
-        print(f"\n{roundWinner} a remporté le pli\n")
-        print(f"\nLes scores sont:")
-        print(f"Joueur 1: {comptA} ------- Joueur 2: {comptB}\n")
-        self.scoreA.setText(f"Score: {comptA}")
-        self.scoreB.setText(f"Score: {comptB}")
+        self.currentWinner.setText(f"Round {round} | WINNER : {roundWinner}")
+        self.scoreA.setText(f"Score: {self.comptA}")
+        self.scoreB.setText(f"Score: {self.comptB}")
 
 
 class cardWindow(QWidget):
