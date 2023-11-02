@@ -374,19 +374,6 @@
      <string>Afficher Mes Cartes</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="addCard">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>420</y>
-      <width>171</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Add a Card</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

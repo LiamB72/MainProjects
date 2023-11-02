@@ -27,19 +27,6 @@
      <string>Afficher Mes Cartes</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="addCard">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>150</y>
-      <width>171</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Add a Card</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="sendingButtonB">
     <property name="geometry">
      <rect>
