@@ -294,13 +294,9 @@ class playerWindow(QMainWindow):
                 self.paquetA.append(carteJoueeB)
                 
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
-                    
-                    for i in range(len(self.batailleA)):
                         
-                        print(self.batailleA[i], self.batailleB[i])
-                        self.paquetA.append(self.batailleA[i])
-                        self.paquetA.append(self.batailleB[i])
-                        
+                    self.paquetA.extend(self.batailleA)
+                    self.paquetA.extend(self.batailleB) 
                     self.bataille = False
 
             self.comptA += 1
@@ -320,11 +316,8 @@ class playerWindow(QMainWindow):
                 
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
                     
-                    for i in range(len(self.batailleA)):
-                        print(self.batailleA[i], self.batailleB[i])
-                        self.paquetA.append(self.batailleA[i])
-                        self.paquetA.append(self.batailleB[i])
-                        
+                    self.paquetA.extend(self.batailleA)
+                    self.paquetA.extend(self.batailleB)
                     self.bataille = False
 
             self.comptB += 1

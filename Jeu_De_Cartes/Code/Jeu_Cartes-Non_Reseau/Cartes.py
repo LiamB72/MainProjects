@@ -29,15 +29,15 @@ class Window(QMainWindow, Ui_MainWindow):
         
         print(packetX)
     
-    def changeImageCarte(self, imagePathNameA, imagePathNameB):
+    def changeImageCarte(self, imagePathNameA:int, imagePathNameB:int):
         
-        self.carteChoisieA.setPixmap(QtGui.QPixmap("Jeu_Cartes-Non_Reseau/data/"+str(imagePathNameA)+".png"))
-        self.carteChoisieB.setPixmap(QtGui.QPixmap("Jeu_Cartes-Non_Reseau/data/"+str(imagePathNameB)+".png"))
+        self.carteChoisieA.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameA)+".png"))
+        self.carteChoisieB.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameB)+".png"))
         
-    def changeTexte(self, stringA, stringB):
+    def changeTexte(self, stringA:str, stringB:str):
         
-        self.currentCardA.setText(str(stringA))
-        self.currentCardB.setText(str(stringB))
+        self.currentCardA.setText(stringA)
+        self.currentCardB.setText(stringB)
 
     def run(self):
         
@@ -59,7 +59,11 @@ class Window(QMainWindow, Ui_MainWindow):
         batailleA = []
         batailleB = []
 
-        HumanWatching = False
+        matchViewing = input("Regarder le match: (Y/N): ")
+        matchViewing.capitalize()
+        HumanWatching = True if matchViewing == "Y" else False
+        if matchViewing == "N":
+            n = float(input("Vitesse du jeu (en secondes): "))
         roundNb = 0
         roundWinner = "Noone"
         
@@ -111,7 +115,7 @@ class Window(QMainWindow, Ui_MainWindow):
             if HumanWatching:
                 sleep(2)
             else:
-                sleep(.15)
+                sleep(n)
             
             if carteJoueeA[0] > carteJoueeB[0]:
                 
@@ -136,7 +140,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 if HumanWatching:
                     sleep(3)
                 else:
-                    sleep(.5)
+                    sleep(n)
                 
                 batailleA.append(carteJoueeA)
                 batailleB.append(carteJoueeB)
@@ -148,7 +152,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 if HumanWatching:
                     sleep(2)
                 else:
-                    sleep(.15)    
+                    sleep(n)    
                 
                 
                 if carteJoueeA[0] > carteJoueeB[0]:
@@ -185,7 +189,7 @@ class Window(QMainWindow, Ui_MainWindow):
             if HumanWatching:
                 sleep(2)
             else:
-                sleep(.15)
+                sleep(n)
             
             carteJoueeA = jeuA.tirer()
             carteJoueeB = jeuB.tirer()
@@ -206,44 +210,56 @@ class Window(QMainWindow, Ui_MainWindow):
         gameThread = threading.Thread(target=self.run)
         gameThread.start()
 
-       
-"""
-#Q1 Initialisation de la classe « JeuDeCartes » : FAIT
-jeux = JeuDeCartes()
-print(jeux.carte)
+def run():     
+    run = int(input("Voir les Questions ou le jeu (1/2): "))
+    return run
 
-#Q2 Affichage du nom de la carte : FAIT
-jeux = JeuDeCartes()
-jeux.nomCarte((1, 2))
-jeux.nomCarte((12, 1)) 
+run = run()
 
-#Q3 Battre les cartes : FAIT
-#jeux = JeuDeCartes()
-#jeux.battre()
-#print(jeux.carte)
+if run == 1:
+    
+    #Q1 Initialisation de la classe « JeuDeCartes » : FAIT
+    jeux = JeuDeCartes()
+    print(f"\n\nQ1:{jeux.carte}")
 
-#Q4.1 Tirer une carte : FAIT
-#jeux = JeuDeCartes()
-#jeux.battre()
-#print(jeux.carte)
-#c = jeux.tirer()
-#print(jeux.nomCarte(c))
-#print()
-#print(jeux.carte)
+    #Q2 Affichage du nom de la carte : FAIT
+    jeux = JeuDeCartes()
+    print("\n\nQ2:")
+    print(jeux.nomCarte((1, 2)))
+    print(jeux.nomCarte((12, 1)))
 
-#Q4.2 Tirage de toutes le cartes
-#jeux = JeuDeCartes()
-#jeux.battre()
-#
-#for n in range(53):
-#    c = jeux.tirer()
+    #Q3 Battre les cartes : FAIT
+    print("\n\nQ3:")
+    jeux = JeuDeCartes()
+    jeux.battre()
+    print(jeux.carte)
 
-"""
+    #Q4.1 Tirer une carte : FAIT
+    print("\n\nQ4.1:")
+    jeux = JeuDeCartes()
+    jeux.battre()
+    print(jeux.carte)
+    c = jeux.tirer()
+    print(jeux.nomCarte(c))
+    print()
+    print(jeux.carte)
 
-app = QApplication([])
-window = Window()
+    #Q4.2 Tirage de toutes le cartes
+    print("\n\nQ4.2:")
+    jeux = JeuDeCartes()
+    jeux.battre()
 
-window.show()
-window.threadStart()
+    for n in range(53):
+        c = jeux.tirer()
+        print(jeux.nomCarte(c))
 
-app.exec()
+elif run == 2:
+    
+    app = QApplication([])
+    window = Window()
+    window.show()
+    window.threadStart()
+    app.exec()
+    
+else:
+    run()
