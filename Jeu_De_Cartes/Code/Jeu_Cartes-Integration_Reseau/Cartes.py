@@ -180,20 +180,10 @@ class playerWindow(QMainWindow):
             message = (self.currentCardA.text().strip(), self.ready1, ())
             self.sendingButtonA.setEnabled(False)
             
-            data = pickle.dumps(message)
-            self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
-            
-            print(message, data)
-            
         elif self.player == 2:
             self.ready2 = True
             message = (self.currentCardB.text().strip(), self.ready2, ())
             self.sendingButtonB.setEnabled(False)
-            
-            data = pickle.dumps(message)
-            self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
-            
-            print(message, data)
             
         self.applyChanges()
         
@@ -202,8 +192,8 @@ class playerWindow(QMainWindow):
         # As stated previously in self.update(), the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
         # So we use pickle.dumps to transform the tuple into bytes and then send them tot he receiver's IP.
         
-        # data = pickle.dumps(message)
-        # sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
+        data = pickle.dumps(message)
+        self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
         
         if self.debugging:
             print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
@@ -276,7 +266,6 @@ class playerWindow(QMainWindow):
                         carteJoueeB = key
             
             indexA = self.paquetA.index(carteJoueeA)
-            print(indexA)
             
         elif self.player == 2:
             
@@ -287,7 +276,6 @@ class playerWindow(QMainWindow):
                         carteJoueeA = key
                         
             indexB = self.paquetB.index(carteJoueeB)
-            print(indexB)
 
         if carteJoueeA[0] > carteJoueeB[0]:
                 
@@ -309,41 +297,40 @@ class playerWindow(QMainWindow):
             self.comptB += 1
             roundWinner = "Joueur 2"
             
-        #elif carteJoueeA[0] == carteJoueeB[0]:
-        #    
-        #    print("\n**************************\nBATAILLE!\n**************************")
-        #    
-        #    self.currentWinner.setText(f"Bataille !!!")
-        #    
-        #    batailleA.append(carteJoueeA)
-        #    batailleB.append(carteJoueeB)
-        #    
-        #    carteJoueeA = jeuA.tirer()
-        #    carteJoueeB = jeuB.tirer()             
-        #    
-        #    if carteJoueeA[0] > carteJoueeB[0]:
-        #    
-        #        packetA.append(carteJoueeA)
-        #        packetA.append(carteJoueeB)
-        #        packetA.append(batailleA[0])
-        #        packetA.append(batailleB[0])
-        #        
-        #        batailleA.clear()
-        #        batailleB.clear()
-        #        
-        #        comptA += 1
-        #        roundWinner = "Joueur 1"
-        #    elif carteJoueeB[0] > carteJoueeA[0]:
-        #        packetB.append(carteJoueeA)
-        #        packetB.append(carteJoueeB)
-        #        packetB.append(batailleA[0])
-        #        packetB.append(batailleB[0])
-        #        
-        #        batailleA.clear()
-        #        batailleB.clear()
-        #        
-        #        comptB += 1
-        #        roundWinner = "Joueur 2"
+        elif carteJoueeA[0] == carteJoueeB[0]:
+            
+            self.currentWinner.setText("**************************BATAILLE!**************************")
+            
+            self.batailleA.append(carteJoueeA)
+            self.batailleB.append(carteJoueeB)
+            if self.player == 1:
+                    self.paquetA.pop(indexA)
+            if self.player == 2:
+                    self.paquetB.pop(indexB)
+            
+            if carteJoueeA[0] > carteJoueeB[0]:
+                
+                if self.player == 2:
+                    self.paquetB.pop(indexB)
+                if self.player == 1:
+                    self.paquetA.append(carteJoueeB)
+                    self.paquetA.append(key for key in self.batailleA)
+                    self.paquetA.append(key for key in self.batailleB)
+
+                self.comptA += 1
+                roundWinner = "Joueur 1"
+                
+            elif carteJoueeB[0] > carteJoueeA[0]:
+
+                if self.player == 1:
+                    self.paquetA.pop(indexA)
+                if self.player == 2:
+                    self.paquetB.append(carteJoueeA)
+                    self.paquetB.append(key for key in self.batailleA)
+                    self.paquetB.append(key for key in self.batailleB)
+
+                self.comptB += 1
+                roundWinner = "Joueur 2"
                 
         self.currentWinner.setText(f"Round {self.round} | WINNER : {roundWinner}")
         self.scoreA.setText(f"Score: {self.comptA}")
