@@ -10,10 +10,9 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea
 from PyQt5.QtGui import QIcon, QPixmap
 from functools import partial
-from time import sleep
 import socket
 import pickle
-import threading
+
 
 class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
     
@@ -240,9 +239,7 @@ class playerWindow(QMainWindow):
                 self.sendingButtonB.setEnabled(True)
                 
             self.ready1, self.ready2 = False, False
-            
-            start_thread = threading.Thread(self.runGame())
-            start_thread.start()
+            self.runGame()
     
     def runGame(self):
         indexA = 0
@@ -321,9 +318,9 @@ class playerWindow(QMainWindow):
             self.currentWinner.setText(f"Round {self.round} | WINNER : {roundWinner}")
             self.scoreA.setText(f"Score: {self.comptA}")
             self.scoreB.setText(f"Score: {self.comptB}")
-            sleep(1.4)
-            self.changeCurrentCardA(54, "", ())
-            self.changeCurrentCardB(54, "", ())
+
+            self.changeCurrentCardA(JeuDeCartes().images[carteJoueeA], JeuDeCartes().nomCarte(carteJoueeA), ())
+            self.changeCurrentCardB(JeuDeCartes().images[carteJoueeB], JeuDeCartes().nomCarte(carteJoueeB), ())
             
             self.round += 1
 
