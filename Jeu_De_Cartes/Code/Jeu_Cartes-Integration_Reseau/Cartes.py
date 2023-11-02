@@ -319,8 +319,8 @@ class playerWindow(QMainWindow):
             self.scoreA.setText(f"Score: {self.comptA}")
             self.scoreB.setText(f"Score: {self.comptB}")
 
-            self.changeCurrentCardA(JeuDeCartes().images[carteJoueeA], JeuDeCartes().nomCarte(carteJoueeA), ())
-            self.changeCurrentCardB(JeuDeCartes().images[carteJoueeB], JeuDeCartes().nomCarte(carteJoueeB), ())
+            self.changeCurrentCardA(JeuDeCartes().images[carteJoueeA], "", ())
+            self.changeCurrentCardB(JeuDeCartes().images[carteJoueeB], "", ())
             
             self.round += 1
 
