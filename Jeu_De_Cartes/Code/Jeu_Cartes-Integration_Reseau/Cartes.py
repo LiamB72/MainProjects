@@ -276,34 +276,34 @@ class playerWindow(QMainWindow):
                         carteJoueeA = key
                         
             indexB = self.paquetB.index(carteJoueeB)
+        if not carteJoueeA[0] == carteJoueeB[0]:
+            if carteJoueeA[0] > carteJoueeB[0]:
 
-        if carteJoueeA[0] > carteJoueeB[0]:
-                
-            if self.player == 2:
-                self.paquetB.pop(indexB)
-            if self.player == 1:
-                self.paquetA.append(carteJoueeA)
-                self.paquetA.pop(indexA)
-                self.paquetA.append(carteJoueeB)
-            
-            self.comptA += 1
-            roundWinner = "Joueur 1"
-                
-        elif carteJoueeB[0] > carteJoueeA[0]:
-            
-            if self.player == 1:
-                self.paquetA.pop(indexA)
-            if self.player == 2:
-                self.paquetB.append(carteJoueeB)
-                self.paquetB.pop(indexB)
-                self.paquetB.append(carteJoueeA)
-            
-            self.comptB += 1
-            roundWinner = "Joueur 2"
-            
+                if self.player == 2:
+                    self.paquetB.pop(indexB)
+                if self.player == 1:
+                    self.paquetA.append(carteJoueeA)
+                    self.paquetA.pop(indexA)
+                    self.paquetA.append(carteJoueeB)
+
+                self.comptA += 1
+                roundWinner = "Joueur 1"
+
+            elif carteJoueeB[0] > carteJoueeA[0]:
+
+                if self.player == 1:
+                    self.paquetA.pop(indexA)
+                if self.player == 2:
+                    self.paquetB.append(carteJoueeB)
+                    self.paquetB.pop(indexB)
+                    self.paquetB.append(carteJoueeA)
+
+                self.comptB += 1
+                roundWinner = "Joueur 2"
+
         elif carteJoueeA[0] == carteJoueeB[0]:
             
-            self.currentWinner.setText("**************************BATAILLE!**************************")
+            self.currentWinner.setText("*******BATAILLE!*******")
             
             self.batailleA.append(carteJoueeA)
             self.batailleB.append(carteJoueeB)
