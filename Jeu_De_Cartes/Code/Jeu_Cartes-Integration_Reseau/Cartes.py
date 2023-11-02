@@ -86,8 +86,6 @@ class playerWindow(QMainWindow):
         self.timer.start(100)
         
         self.showPossibleCards.clicked.connect(self.showCards)
-        #self.addCard.clicked.connect(self.addCardToDeck)
-        #self.addCard.clicked.connect(self.addCardToDeck)
         self.cardWindow = None
 
         if self.player == 1:
