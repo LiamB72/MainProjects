@@ -278,32 +278,39 @@ class playerWindow(QMainWindow):
                         
             indexB = self.paquetB.index(carteJoueeB)
             
-        if not carteJoueeA[0] == carteJoueeB[0] or self.bataille == False:
-            if carteJoueeA[0] > carteJoueeB[0]:
+        if carteJoueeA[0] > carteJoueeB[0]:
 
-                if self.player == 2:
-                    self.paquetB.pop(indexB)
-                if self.player == 1:
-                    self.paquetA.append(carteJoueeA)
-                    self.paquetA.pop(indexA)
-                    self.paquetA.append(carteJoueeB)
+            if self.player == 2:
+                self.paquetB.pop(indexB)
+            if self.player == 1:
+                self.paquetA.append(carteJoueeA)
+                self.paquetA.pop(indexA)
+                self.paquetA.append(carteJoueeB)
+                if len(self.batailleA) != 0 and len(self.batailleB) != 0:
+                    self.paquetA.append(key for key in self.batailleA)
+                    self.paquetA.append(key for key in self.batailleB)
+                    self.bataille = False
 
-                self.comptA += 1
-                roundWinner = "Joueur 1"
+            self.comptA += 1
+            roundWinner = "Joueur 1"
 
-            elif carteJoueeB[0] > carteJoueeA[0]:
+        elif carteJoueeB[0] > carteJoueeA[0]:
 
-                if self.player == 1:
-                    self.paquetA.pop(indexA)
-                if self.player == 2:
-                    self.paquetB.append(carteJoueeB)
-                    self.paquetB.pop(indexB)
-                    self.paquetB.append(carteJoueeA)
+            if self.player == 1:
+                self.paquetA.pop(indexA)
+            if self.player == 2:
+                self.paquetB.append(carteJoueeB)
+                self.paquetB.pop(indexB)
+                self.paquetB.append(carteJoueeA)
+                if len(self.batailleA) != 0 and len(self.batailleB) != 0:
+                    self.paquetB.append(key for key in self.batailleA) 
+                    self.paquetB.append(key for key in self.batailleB)
+                    self.bataille = False
 
-                self.comptB += 1
-                roundWinner = "Joueur 2"
+            self.comptB += 1
+            roundWinner = "Joueur 2"
 
-        else:
+        elif carteJoueeA[0] == carteJoueeB[0]:
             
             self.bataille = True
             
@@ -315,34 +322,8 @@ class playerWindow(QMainWindow):
                     self.paquetA.pop(indexA)
             if self.player == 2:
                     self.paquetB.pop(indexB)
-            
-            if carteJoueeA[0] > carteJoueeB[0]:
-                
-                if self.player == 2:
-                    self.paquetB.pop(indexB)
-                if self.player == 1:
-                    self.paquetA.append(carteJoueeB)
-                    self.paquetA.append(key for key in self.batailleA)
-                    self.paquetA.append(key for key in self.batailleB)
-
-                self.comptA += 1
-                roundWinner = "Joueur 1"
-                self.bataille = False
-                
-            elif carteJoueeB[0] > carteJoueeA[0]:
-
-                if self.player == 1:
-                    self.paquetA.pop(indexA)
-                if self.player == 2:
-                    self.paquetB.append(carteJoueeA)
-                    self.paquetB.append(key for key in self.batailleA)
-                    self.paquetB.append(key for key in self.batailleB)
-
-                self.comptB += 1
-                roundWinner = "Joueur 2"
-                self.bataille = False
-        
-        if self.bataille == False:
+                    
+        if not self.bataille:
             self.currentWinner.setText(f"Round {self.round} | WINNER : {roundWinner}")
             self.scoreA.setText(f"Score: {self.comptA}")
             self.scoreB.setText(f"Score: {self.comptB}")
