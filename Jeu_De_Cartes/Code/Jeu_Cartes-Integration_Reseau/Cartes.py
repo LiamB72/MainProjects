@@ -347,7 +347,6 @@ class cardWindow(QWidget):
         
         if lenghtDeck != 0:
             for i in range(0, lenghtDeck):
-                #print(deck[i])
             
                 button = QPushButton()
                 button.clicked.connect(partial(self.button_clicked, main_window))
