@@ -263,6 +263,7 @@ class playerWindow(QMainWindow):
                         carteJoueeB = key
             
             indexA = self.paquetA.index(carteJoueeA)
+            print(indexA)
             
         elif self.player == 2:
             
@@ -273,14 +274,15 @@ class playerWindow(QMainWindow):
                         carteJoueeA = key
                         
             indexB = self.paquetB.index(carteJoueeB)
+            print(indexB)
 
-        
         if carteJoueeA[0] > carteJoueeB[0]:
                 
             if self.player == 2:
                 self.paquetB.pop(indexB)
             if self.player == 1:
                 self.paquetA.append(carteJoueeB)
+            
             self.comptA += 1
             roundWinner = "Joueur 1"
                 
@@ -290,6 +292,7 @@ class playerWindow(QMainWindow):
                 self.paquetA.pop(indexA)
             if self.player == 2:
                 self.paquetB.append(carteJoueeA)
+            
             self.comptB += 1
             roundWinner = "Joueur 2"
             
@@ -333,13 +336,6 @@ class playerWindow(QMainWindow):
         self.scoreA.setText(f"Score: {self.comptA}")
         self.scoreB.setText(f"Score: {self.comptB}")
         self.round += 1
-        sleep(1.4)
-        if roundWinner == "Joueur 1":
-            self.changeCurrentCardA(54,str(JeuDeCartes().nomCarte(carteJoueeA)),())
-            self.changeCurrentCardB(54,"",())
-        if roundWinner == "Joueur 2":
-            self.changeCurrentCardA(54,"",())
-            self.changeCurrentCardB(54,str(JeuDeCartes().nomCarte(carteJoueeB)),())
 
 
 class cardWindow(QWidget):
