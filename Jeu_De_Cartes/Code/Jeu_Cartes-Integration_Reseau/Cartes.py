@@ -215,13 +215,13 @@ class playerWindow(QMainWindow):
         elif self.player == 2:
             self.paquetB.append((randint(0,12),randint(0,3)))
         
-    def changeCurrentCardA(self, imagePathNameA, newCard, data):
+    def changeCurrentCardA(self, imagePathNameA:int, newCard:str, data:tuple):
         # Changes the card's Pixel Map (It's Image) with a given Path
         self.carteChoisieA.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameA)+".png"))
         self.currentCardA.setText(newCard)
         self.chosenCardA = data
         
-    def changeCurrentCardB(self, imagePathNameB, newCard, data):
+    def changeCurrentCardB(self, imagePathNameB:int, newCard:str, data:tuple):
         # Changes the card's Pixel Map (It's Image) with a given Path
         self.carteChoisieB.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameB)+".png"))
         self.currentCardB.setText(newCard)
@@ -327,6 +327,10 @@ class playerWindow(QMainWindow):
             self.currentWinner.setText(f"Round {self.round} | WINNER : {roundWinner}")
             self.scoreA.setText(f"Score: {self.comptA}")
             self.scoreB.setText(f"Score: {self.comptB}")
+
+            self.changeCurrentCardA(54, "", ())
+            self.changeCurrentCardB(54, "", ())
+            
             self.round += 1
 
 
