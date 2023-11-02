@@ -41,44 +41,96 @@ class BlackJack(JeuDeCartes):
         self.cardValue.update({(x, y): 10 for x in range(9, 12) for y in range(4)})
         self.cardValue.update({(12, y): 11 for y in range(4)})
 
+        self.bot = input("Human or Bot? (H)/(B): ")
+        
         self.run()
 
         
-    def actionChoice(self):
+    def playerTurn(self, botParameter):
+        bot = botParameter
         
-        if self.moneyOnTheLine == "Y":
-            pAct = input(f"\n{self.plName}: Hit (H) | Stand (S) | Double (D) | Split (SP): ")
-            match pAct:
-                case "H":
-                    self.playerhAct()
-                case "S":
-                    self.playersAct()
-                case "D":
-                    self.dAct()
-                case "SP":
-                    self.spAct()
-        else:
-            pAct = input(f"\n{self.plName}: Hit (H) | Stand (S): ")
-            match pAct:
-                case "H":
-                    self.playerhAct()
-                case "S":
-                    self.playersAct()
-                    
-        self.dealer
+        if bot == "H":
+        
+            pAct = ""
+            while pAct != "S":
+                if self.moneyOnTheLine == "Y":
+                    pAct = input(f"\n{self.plName}: Hit (H) | Stand (S) | Double (D) | Split (SP): ")
+                    match pAct:
+                        case "H":
+                            self.playerH_Act()
+                        case "D":
+                            self.d_Act()
+                        case "SP":
+                            self.sp_Act()
+                else:
+                    pAct = input(f"\n{self.plName}: Hit (H) | Stand (S): ")
+                    match pAct:
+                        case "H":
+                            self.playerH_Act()
+                            
+                print(f"\n<<--------->>\n{self.player}\n<<--------->>")
+            else:
+                self.playerS_Act()
+        elif bot == "B":
+            
+            res = self.calculatePoint(self.plHand, self.dlHand)
+        
+            if res[0] > 17:
+                self.playerS_Act()
+
+            if res[0] <= 16:
+                self.playerH_Act()
+                self.playerTurn(bot)
+
+            for i in range(len(self.plHand)):
+
+                if self.cardValue[self.plHand[i]] == 11:
+
+                    if self.cardValue[self.plHand[0]] + self.cardValue[self.plHand[1]] == 21:
+                        break
+                    elif self.cardValue[self.plHand[0]] + self.cardValue[self.plHand[1]] <= 17:
+                        break
+                    else:
+                        modified_deck = list(self.plHand)
+                        modified_deck[i] = (1, self.plHand[i][1])
+                        self.plHand = modified_deck
+                        
+    def dealerTurn(self):
+
+        for i in range(len(self.dlHand)):
+            
+            if self.cardValue[self.dlHand[i]] == 11:
+                
+                if self.cardValue[self.dlHand[0]] + self.cardValue[self.dlHand[1]] == 21:
+                    break
+                elif self.cardValue[self.dlHand[0]] + self.cardValue[self.dlHand[1]] <= 17:
+                    break
+                else:
+                    modified_deck = list(self.dlHand)
+                    modified_deck[i] = (1, self.dlHand[i][1])
+                    self.dlHand = modified_deck
+        
+        res = self.calculatePoint(self.plHand, self.dlHand)
+        
+        if res[1] >= 17:
+            self.dealerSAct()
+        
+        if res[1] <= 16:
+            self.dealerHAct()
+            self.dealerTurn()
     
-    def playerhAct(self):
+    def playerH_Act(self):
         self.player.addCards(self.newList)
     
-    def playersAct(self):
+    def playerS_Act(self):
         self.player.intoName()
         return f"\n{self.plName} s'est couché(e) avec une main: {self.player.deckName}"
     
-    def dAct(self):
+    def d_Act(self):
         self.currentBet = self.initialBet * 2
         self.player.addCards(self.newList)
         
-    def spAct(self):
+    def sp_Act(self):
         
         self.tempDeck1 = []
         self.tempDeck2 = []
@@ -135,7 +187,6 @@ class BlackJack(JeuDeCartes):
             elif res2[0] < res3[0]:
                 self.checkWinner(res3)
             
-    
     def dealerHAct(self):
         self.dealer.addCards(self.newList)
     
@@ -182,10 +233,12 @@ class BlackJack(JeuDeCartes):
                 if self.cardValue[self.plHand[0]] + self.cardValue[self.plHand[1]] == 21:
                     break
                 
-                ask = int(input("L'as comte il comme 1 ou 11? :"))
+                ask = int(input("\nL'as comte il comme (1) ou (11): "))
             
                 if ask == 1:
-                    self.plHand[(1, self.plHand[i][1])][0] = self.plHand.pop(i)
+                    modified_deck = list(self.plHand)
+                    modified_deck[i] = (1, self.plHand[i][1])
+                    self.plHand = modified_deck
     
     def calculatePoint(self, plHand:list, dlHand:list):
         
@@ -215,11 +268,15 @@ class BlackJack(JeuDeCartes):
         print(f'\nLa main du {self.plName} est: {(", ".join(self.player.deckName[i] for i in range(len(self.plHand))))}')
         print(f'La 2nd carte du {self.dlName} est: {self.dealer.deckName[1]}')
         
-        self.actionChoice()
-        self.oneOreleven()
+        self.playerTurn(self.bot)
+        if self.bot == "H":
+            self.oneOreleven()
+        self.dealerTurn()
         res = self.calculatePoint(self.plHand, self.dlHand)
+        print()
         print(self.player)
         print(self.dealer)
+        print(res)
         print(self.checkWinner(res))
         
         
