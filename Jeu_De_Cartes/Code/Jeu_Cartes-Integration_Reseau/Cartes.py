@@ -191,8 +191,9 @@ class playerWindow(QMainWindow):
         if self.debugging:
             (f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
         sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
-        
+        print(self.ready1, self.ready2)
         self.applyChanges()
+        print(self.ready1, self.ready2)
         
         
     def showCards(self):
