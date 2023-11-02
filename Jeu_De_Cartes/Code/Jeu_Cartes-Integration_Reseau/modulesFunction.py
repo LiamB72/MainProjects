@@ -20,10 +20,10 @@ class JeuDeCartes(object):
                        (0, 2): "27",(1, 2): "28",(2, 2): "29",(3, 2): "30",(4, 2): "31",(5, 2): "32",(6, 2): "33",(7, 2): "34",(8, 2): "35",(9, 2): "36",(10, 2): "37",(11, 2): "38",(12, 2): "26",
                        (0, 3): "40",(1, 3): "41",(2, 3): "42",(3, 3): "43",(4, 3): "44",(5, 3): "45",(6, 3): "46",(7, 3): "47",(8, 3): "48",(9, 3): "49",(10, 3): "50",(11, 3): "51",(12, 3): "39"}
 
-    def nomCarte(self, carte:tuple):
+    def nomCarte(self, a0:tuple):
         """Renvoie le nom de la carte """
         if self.carte != []:
-            return f"{self.valeur[carte[0]]} de {self.couleur[carte[1]]}"
+            return f"{self.valeur[a0[0]]} de {self.couleur[a0[1]]}"
 
     def battre(self):
         """Mélange les cartes"""

@@ -33,6 +33,7 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
         self.game_window2 = None
         self.debugging = False
     
+    # When pressing the start button!
     def startGame(self):
         self.RECEIVER_IP = self.lineEdit.text().strip()
         self.RECEIVER_PORT = 5000
@@ -63,21 +64,25 @@ class playerWindow(QMainWindow):
         elif self.player == 2:
             uic.loadUi("Code/Jeu_Cartes-Integration_Reseau/UIs/cartesJeux_ui-Player2.ui", self)
         
+        # Make you unable to resize the window
         self.setFixedSize(self.size())
         self.show()
         
         self.SENDER_IP = start_menu.SENDER_IP
         self.SENDER_PORT = start_menu.SENDER_PORT
+        self.IP_SENDER_LABEL.setText("Votre IP: "+self.SENDER_IP)
+        
         self.RECEIVER_IP = start_menu.RECEIVER_IP
         self.RECEIVER_PORT = start_menu.RECEIVER_PORT
+        self.IP_RECEVEUR_LABEL.setText("Leur IP: "+self.RECEIVER_IP)
         
         self.sock = start_menu.sock
         self.debugging = start_menu.debugging
         
-        self.IP_RECEVEUR_LABEL.setText("Leur IP: "+self.RECEIVER_IP)
-        self.IP_SENDER_LABEL.setText("Votre IP: "+self.SENDER_IP)
+        
         if self.player == 1:
             self.sendingButtonA.clicked.connect(self.sendMessage)
+            
         if self.player == 2:
             self.sendingButtonB.clicked.connect(self.sendMessage)
         
@@ -88,6 +93,7 @@ class playerWindow(QMainWindow):
         self.showPossibleCards.clicked.connect(self.showCards)
         self.cardWindow = None
 
+        # Set the variables when player 1 has entered the game.
         if self.player == 1:
 
             self.jeu = JeuDeCartes()
@@ -108,6 +114,7 @@ class playerWindow(QMainWindow):
             if self.debugging:
                 print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
 
+            # Sends the variables to the player 2.
             tempSock = self.sock
             tempSock.connect((self.RECEIVER_IP, self.RECEIVER_PORT))
 
@@ -118,33 +125,36 @@ class playerWindow(QMainWindow):
         elif self.player == 2:
             
             self.paquetB = []
-            
+        
+        # Initialize other variable to be used by both players.
         self.comptA = 0
         self.batailleA = []
         self.chosenCardA = ()
+        
         self.comptB = 0
         self.batailleB = []
-        self.chosenCardB = ()            
+        self.chosenCardB = () 
+                   
         self.ready1 = False
         self.ready2 = False
         
         self.round = 1
-        
+    
+    
+    # On a repeting clock of 100ms, it updates both the variables and the ui elements.
     def update(self):
         try:
             data, server = self.sock.recvfrom(1024)
         except socket.error as msg:
             data = None
         if data != None:
-            #message = data.decode()
-            # The message is now a tuple that tells which card is played by the other party (which is btw a string and not a another tuple),
-            # and then a bool to tell that the party A or B is ready. And so that's why we use pickle, it's to "serialize" (transform into bytes)
-            # the message sent with pickle.dumps(data), then loads the message's data with pickle.loads(data), to retrive the tuple and its content.
+            
+            # Message is a Tuple != string, so we use pickle.dumps to encode the tuple.
+            # Then we use pickle.loads to decode the tuple.
             self.message = pickle.loads(data)
-            
-            print(self.message)
-            
-            if self.message[2] == ():
+             
+            if self.message[2] == (): # To check if the starting data has been already given. 
+                
                 if self.player == 1:
                     if self.message[1]:
                         self.ready2 = True
@@ -160,16 +170,16 @@ class playerWindow(QMainWindow):
                         
                     if self.debugging:
                         print("To Player2: ",self.message, " | ", type(self.message))
-                    
-                self.applyChanges()
                 
+                self.applyChanges()
+            
+            # Retrives the starting data.  
             elif self.message[2] != () and self.player == 2:
                 self.jeu = self.message[2][0]
                 self.paquetB = self.message[2][1]
                 print("You received the data required to play!")
             
     def sendMessage(self):
-        #sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
         if self.player == 1:
@@ -184,19 +194,18 @@ class playerWindow(QMainWindow):
             
         self.applyChanges()
         
-        #data = message.encode("Utf8")
-        
-        # As stated previously in self.update(), the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
-        # So we use pickle.dumps to transform the tuple into bytes and then send them tot he receiver's IP.
-        
+        # Explained in self.update()
         data = pickle.dumps(message)
+        
+        # Sends the data to the opponent.
         self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
         
         if self.debugging:
             print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
-        
+    
+    # Shows the window which contains the deck of the player opening the window.
     def showCards(self):
-        # Shows a window, within is shown the player's current card that they earn during the game.
+        
         if self.player == 1:
             self.cardWindow = cardWindow(self, self.paquetA)
             
@@ -204,19 +213,23 @@ class playerWindow(QMainWindow):
             self.cardWindow = cardWindow(self, self.paquetB)
             
         self.cardWindow.show()
-        
+    
+    # Changes the image of the card A and the text of the current card A played.
     def changeCurrentCardA(self, imagePathNameA:int, newCard:str, data:tuple):
-        # Changes the card's Pixel Map (It's Image) with a given Path
+
         self.carteChoisieA.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameA)+".png"))
         self.currentCardA.setText(newCard)
         self.chosenCardA = data
-        
+    
+    # Changes the image of the card B and the text of the current card A played.   
     def changeCurrentCardB(self, imagePathNameB:int, newCard:str, data:tuple):
-        # Changes the card's Pixel Map (It's Image) with a given Path
+
         self.carteChoisieB.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameB)+".png"))
         self.currentCardB.setText(newCard)
         self.chosenCardB = data
-        
+    
+    # Changes the UI elements, some variables and starts the actual game when both
+    # of the players are ready.
     def applyChanges(self):
         
         if self.ready1 and self.ready2:
@@ -241,6 +254,7 @@ class playerWindow(QMainWindow):
             self.ready1, self.ready2 = False, False
             self.runGame()
     
+    # The title says it all.
     def runGame(self):
         indexA = 0
         indexB = 0
@@ -273,15 +287,20 @@ class playerWindow(QMainWindow):
 
             if self.player == 2:
                 self.paquetB.pop(indexB)
+                
             if self.player == 1:
                 self.paquetA.append(carteJoueeA)
                 self.paquetA.pop(indexA)
                 self.paquetA.append(carteJoueeB)
+                
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
+                    
                     for i in range(len(self.batailleA)):
+                        
                         print(self.batailleA[i], self.batailleB[i])
                         self.paquetA.append(self.batailleA[i])
                         self.paquetA.append(self.batailleB[i])
+                        
                     self.bataille = False
 
             self.comptA += 1
@@ -290,16 +309,22 @@ class playerWindow(QMainWindow):
         elif carteJoueeB[0] > carteJoueeA[0]:
 
             if self.player == 1:
+                
                 self.paquetA.pop(indexA)
+            
             if self.player == 2:
+                
                 self.paquetB.append(carteJoueeB)
                 self.paquetB.pop(indexB)
                 self.paquetB.append(carteJoueeA)
+                
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
+                    
                     for i in range(len(self.batailleA)):
                         print(self.batailleA[i], self.batailleB[i])
                         self.paquetA.append(self.batailleA[i])
                         self.paquetA.append(self.batailleB[i])
+                        
                     self.bataille = False
 
             self.comptB += 1
@@ -315,11 +340,15 @@ class playerWindow(QMainWindow):
             self.batailleB.append(carteJoueeB)
             
             if self.player == 1:
+                
                     self.paquetA.pop(indexA)
+                    
             if self.player == 2:
+                
                     self.paquetB.pop(indexB)
                     
         if not self.bataille:
+            
             self.currentWinner.setText(f"   Tour n°{self.round} | Gagnant : {roundWinner}")
             self.scoreA.setText(f"Score: {self.comptA}")
             self.scoreB.setText(f"Score: {self.comptB}")
@@ -331,17 +360,15 @@ class playerWindow(QMainWindow):
 
 
 class cardWindow(QWidget):
+    
     def __init__(self, main_window:playerWindow, deck:list):
         
         super().__init__()
-
         self.setWindowTitle("Card Storage")
-
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
-
         self.scroll_area = QScrollArea()
-        self.setGeometry(200, 200, 500, 275)
+        self.setGeometry(200, 200, 700, 275)
         
         widget = QWidget()
         widget_layout = QHBoxLayout()
@@ -350,6 +377,7 @@ class cardWindow(QWidget):
         lenghtDeck = len(deck)
         self.debugging = main_window.debugging
         
+        # Creates a dynamic window of every card in the player's deck.
         if lenghtDeck != 0:
             for i in range(0, lenghtDeck):
                 
@@ -364,7 +392,7 @@ class cardWindow(QWidget):
                 button.setMinimumSize(pixmap.size())
                 widget_layout.addWidget(button)
                 
-            widget_layout.addStretch()  # Add spacing to the right
+            widget_layout.addStretch()  # Adds spacing to the right
             self.scroll_area.setWidget(widget)
             self.layout.addWidget(self.scroll_area)
         else:
