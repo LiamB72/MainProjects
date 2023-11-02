@@ -9,11 +9,11 @@ from PyQt5 import uic, QtGui
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea
 from PyQt5.QtGui import QIcon, QPixmap
+from functools import partial
+from time import sleep
 import socket
 import pickle
-from time import sleep
-from random import randint
-from functools import partial
+import threading
 
 class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
     
@@ -208,13 +208,6 @@ class playerWindow(QMainWindow):
             
         self.cardWindow.show()
         
-    def addCardToDeck(self):
-        # Random Card Generator [ONLY FOR TEST PURPOSES]
-        if self.player == 1:
-            self.paquetA.append((randint(0,12),randint(0,3)))
-        elif self.player == 2:
-            self.paquetB.append((randint(0,12),randint(0,3)))
-        
     def changeCurrentCardA(self, imagePathNameA:int, newCard:str, data:tuple):
         # Changes the card's Pixel Map (It's Image) with a given Path
         self.carteChoisieA.setPixmap(QtGui.QPixmap("Resources/data/"+str(imagePathNameA)+".png"))
@@ -248,7 +241,8 @@ class playerWindow(QMainWindow):
                 
             self.ready1, self.ready2 = False, False
             
-            self.runGame()
+            start_thread = threading.Thread(self.runGame())
+            start_thread.start()
     
     def runGame(self):
         indexA = 0
@@ -327,7 +321,7 @@ class playerWindow(QMainWindow):
             self.currentWinner.setText(f"Round {self.round} | WINNER : {roundWinner}")
             self.scoreA.setText(f"Score: {self.comptA}")
             self.scoreB.setText(f"Score: {self.comptB}")
-
+            sleep(1.4)
             self.changeCurrentCardA(54, "", ())
             self.changeCurrentCardB(54, "", ())
             
