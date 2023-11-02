@@ -316,8 +316,8 @@ class playerWindow(QMainWindow):
                 
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
                     
-                    self.paquetA.extend(self.batailleA)
-                    self.paquetA.extend(self.batailleB)
+                    self.paquetB.extend(self.batailleA)
+                    self.paquetB.extend(self.batailleB)
                     self.bataille = False
 
             self.comptB += 1
