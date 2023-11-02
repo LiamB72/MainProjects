@@ -117,7 +117,7 @@ class playerWindow(QMainWindow):
             data = ("", False, (self.jeu, self.paquetB))
             octets = pickle.dumps(data)
             tempSock.send(octets)
-            tempSock.close()
+            # tempSock.close()
 
         
         elif self.player == 2:
