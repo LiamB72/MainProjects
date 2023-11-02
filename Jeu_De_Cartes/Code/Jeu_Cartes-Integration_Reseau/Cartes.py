@@ -152,6 +152,7 @@ class playerWindow(QMainWindow):
                 if self.player == 1:
                     if self.message[1]:
                         self.ready2 = True
+                        self.labelReady.setText("Joueur 2: Prêt")
                     
                     if self.debugging:
                         print("To Player1: ",self.message, " | ", type(self.message))
@@ -159,6 +160,7 @@ class playerWindow(QMainWindow):
                 elif self.player == 2:
                     if self.message[1]:
                         self.ready1 = True
+                        self.labelReady.setText("Joueur 1: Prêt")
                         
                     if self.debugging:
                         print("To Player2: ",self.message, " | ", type(self.message))
@@ -231,12 +233,14 @@ class playerWindow(QMainWindow):
                         
                 self.sendingButtonA.setEnabled(True)
                 
+                
             elif self.player == 2:
                 for key,_ in JeuDeCartes().images.items():
                     if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
                         self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key), self.message[0])
                         
                 self.sendingButtonB.setEnabled(True)
+                
                 
             self.ready1, self.ready2 = False, False
             self.runGame()
