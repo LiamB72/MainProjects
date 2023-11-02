@@ -172,7 +172,7 @@ class playerWindow(QMainWindow):
                 print("You received the data required to play!")
             
     def sendMessage(self):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        #sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
         if self.player == 1:
@@ -181,7 +181,7 @@ class playerWindow(QMainWindow):
             self.sendingButtonA.setEnabled(False)
             
             data = pickle.dumps(message)
-            sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
+            self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
             
             print(message, data)
             
@@ -191,15 +191,17 @@ class playerWindow(QMainWindow):
             self.sendingButtonB.setEnabled(False)
             
             data = pickle.dumps(message)
-            sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
+            self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
             
             print(message, data)
             
         self.applyChanges()
         
         #data = message.encode("Utf8")
-        # As stated previously in update, the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
+        
+        # As stated previously in self.update(), the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
         # So we use pickle.dumps to transform the tuple into bytes and then send them tot he receiver's IP.
+        
         # data = pickle.dumps(message)
         # sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
         
