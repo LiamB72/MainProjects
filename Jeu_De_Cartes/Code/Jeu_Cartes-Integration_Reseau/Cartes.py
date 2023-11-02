@@ -147,7 +147,7 @@ class playerWindow(QMainWindow):
             # the message sent with pickle.dumps(data), then loads the message's data with pickle.loads(data), to retrive the tuple and its content.
             self.message = pickle.loads(data)
             
-            #print(self.message)
+            print(self.message)
             
             if self.message[2] == ():
                 if self.player == 1:
@@ -165,7 +165,8 @@ class playerWindow(QMainWindow):
                         print("To Player2: ",self.message, " | ", type(self.message))
                     
                 self.applyChanges()
-            elif  self.message[2] != () and self.player == 2:
+                
+            elif self.message[2] != () and self.player == 2:
                 self.jeu = self.message[2][0]
                 self.paquetB = self.message[2][1]
                 print("You received the data required to play!")
@@ -191,9 +192,8 @@ class playerWindow(QMainWindow):
         if self.debugging:
             (f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
         sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
-        print(self.ready1, self.ready2)
+
         self.applyChanges()
-        print(self.ready1, self.ready2)
         
         
     def showCards(self):
