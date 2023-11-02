@@ -1,7 +1,6 @@
 """
 Simulateur de jeu de 52 cartes
-
-Liam BERGE TG1 | Started On: 21/10/2023 | Lastest Edit: 11/01/2023
+Liam BERGE TG1 | Started On: 21/10/2023 | Last Edit: 02/11/2023
 """
 
 from modulesFunction import JeuDeCartes, Ui_MainWindow_StartMenu
@@ -50,6 +49,7 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
             self.game_window.show()
             
         self.close()
+
 
 class playerWindow(QMainWindow):
     
@@ -114,9 +114,7 @@ class playerWindow(QMainWindow):
             data = ("", False, (self.jeu, self.paquetB))
             octets = pickle.dumps(data)
             tempSock.send(octets)
-            # tempSock.close()
 
-        
         elif self.player == 2:
             
             self.paquetB = []
@@ -352,12 +350,8 @@ class cardWindow(QWidget):
         lenghtDeck = len(deck)
         self.debugging = main_window.debugging
         
-        print("\n<<------->>\n")
-        
         if lenghtDeck != 0:
             for i in range(0, lenghtDeck):
-                
-                print(deck[i])
                 
                 button = QPushButton()
                 button.clicked.connect(partial(self.button_clicked, main_window))
@@ -375,7 +369,6 @@ class cardWindow(QWidget):
             self.layout.addWidget(self.scroll_area)
         else:
             pass
-
 
     def button_clicked(self, main_window):
         sender = self.sender()
