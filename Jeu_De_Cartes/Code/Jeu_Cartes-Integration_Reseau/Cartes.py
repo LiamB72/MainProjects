@@ -282,6 +282,8 @@ class playerWindow(QMainWindow):
             if self.player == 2:
                 self.paquetB.pop(indexB)
             if self.player == 1:
+                self.paquetA.append(carteJoueeA)
+                self.paquetA.pop(indexA)
                 self.paquetA.append(carteJoueeB)
             
             self.comptA += 1
@@ -292,6 +294,8 @@ class playerWindow(QMainWindow):
             if self.player == 1:
                 self.paquetA.pop(indexA)
             if self.player == 2:
+                self.paquetB.append(carteJoueeB)
+                self.paquetB.pop(indexB)
                 self.paquetB.append(carteJoueeA)
             
             self.comptB += 1
