@@ -305,7 +305,7 @@ class playerWindow(QMainWindow):
             
             self.bataille = True
             
-            self.currentWinner.setText("************!!BATAILLE!!************")
+            self.currentWinner.setText("**********!!BATAILLE!!**********")
             
             self.batailleA.append(carteJoueeA)
             self.batailleB.append(carteJoueeB)
@@ -315,7 +315,7 @@ class playerWindow(QMainWindow):
                     self.paquetB.pop(indexB)
                     
         if not self.bataille:
-            self.currentWinner.setText(f"Round {self.round} | WINNER : {roundWinner}")
+            self.currentWinner.setText(f"   Tour n°{self.round} | Gagnant : {roundWinner}")
             self.scoreA.setText(f"Score: {self.comptA}")
             self.scoreB.setText(f"Score: {self.comptB}")
 
