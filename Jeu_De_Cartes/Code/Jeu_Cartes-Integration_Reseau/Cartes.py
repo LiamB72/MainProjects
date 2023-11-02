@@ -172,6 +172,8 @@ class playerWindow(QMainWindow):
                 print("You received the data required to play!")
             
     def sendMessage(self):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
         if self.player == 1:
             self.ready1 = True
@@ -183,18 +185,16 @@ class playerWindow(QMainWindow):
             message = (self.currentCardB.text().strip(), self.ready2, ())
             self.sendingButtonB.setEnabled(False)
         
+        self.applyChanges()
+        
         #data = message.encode("Utf8")
         # As stated previously in update, the message is now a tuple, which means it can't be encoded anymore (encode is for text only).
         # So we use pickle.dumps to transform the tuple into bytes and then send them tot he receiver's IP.
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         data = pickle.dumps(message)
         
         if self.debugging:
-            (f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
+            print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
         sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
-
-        self.applyChanges()
-        
         
     def showCards(self):
         # Shows a window, within is shown the player's current card that they earn during the game.
