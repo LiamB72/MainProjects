@@ -335,11 +335,12 @@ class playerWindow(QMainWindow):
 
                 self.comptB += 1
                 roundWinner = "Joueur 2"
-                
-        self.currentWinner.setText(f"Round {self.round} | WINNER : {roundWinner}")
-        self.scoreA.setText(f"Score: {self.comptA}")
-        self.scoreB.setText(f"Score: {self.comptB}")
-        self.round += 1
+        
+        if not carteJoueeA[0] == carteJoueeB[0]:
+            self.currentWinner.setText(f"Round {self.round} | WINNER : {roundWinner}")
+            self.scoreA.setText(f"Score: {self.comptA}")
+            self.scoreB.setText(f"Score: {self.comptB}")
+            self.round += 1
 
 
 class cardWindow(QWidget):
