@@ -278,8 +278,8 @@ class playerWindow(QMainWindow):
                 self.paquetA.pop(indexA)
                 self.paquetA.append(carteJoueeB)
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
-                    self.paquetA.append(key for key in self.batailleA)
-                    self.paquetA.append(key for key in self.batailleB)
+                    self.paquetA.append(self.batailleA[key] for key in range(len(self.batailleA)))
+                    self.paquetA.append(self.batailleB[key] for key in range(len(self.batailleB)))
                     self.bataille = False
 
             self.comptA += 1
@@ -294,8 +294,8 @@ class playerWindow(QMainWindow):
                 self.paquetB.pop(indexB)
                 self.paquetB.append(carteJoueeA)
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
-                    self.paquetB.append(key for key in self.batailleA) 
-                    self.paquetB.append(key for key in self.batailleB)
+                    self.paquetB.append(self.batailleA[key] for key in range(len(self.batailleA)))     
+                    self.paquetB.append(self.batailleB[key] for key in range(len(self.batailleB)))
                     self.bataille = False
 
             self.comptB += 1
@@ -305,10 +305,11 @@ class playerWindow(QMainWindow):
             
             self.bataille = True
             
-            self.currentWinner.setText("**********!!BATAILLE!!**********")
+            self.currentWinner.setText("***********!!BATAILLE!!***********")
             
             self.batailleA.append(carteJoueeA)
             self.batailleB.append(carteJoueeB)
+            
             if self.player == 1:
                     self.paquetA.pop(indexA)
             if self.player == 2:
@@ -345,9 +346,13 @@ class cardWindow(QWidget):
         lenghtDeck = len(deck)
         self.debugging = main_window.debugging
         
+        print("\n<<------->>\n")
+        
         if lenghtDeck != 0:
             for i in range(0, lenghtDeck):
-            
+                
+                print(deck[i])
+                
                 button = QPushButton()
                 button.clicked.connect(partial(self.button_clicked, main_window))
                 button.my_data = deck[i]
