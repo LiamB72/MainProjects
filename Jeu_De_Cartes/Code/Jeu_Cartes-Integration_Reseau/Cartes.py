@@ -119,17 +119,17 @@ class playerWindow(QMainWindow):
             tempSock.send(octets)
             tempSock.close()
 
-            self.batailleA = []
-            self.chosenCardA = ()
         
         elif self.player == 2:
             
             self.paquetB = []
-            self.batailleB = []
-            self.chosenCardB = ()
             
         self.comptA = 0
+        self.batailleA = []
+        self.chosenCardA = ()
         self.comptB = 0
+        self.batailleB = []
+        self.chosenCardB = ()            
         self.ready1 = False
         self.ready2 = False
         
