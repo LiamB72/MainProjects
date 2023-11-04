@@ -100,7 +100,9 @@ class playerWindow(QMainWindow):
             self.jeu.battre()
 
             self.paquetA = []
+            self.tmpPaquetA = []
             self.paquetB = []
+            
 
             if self.debugging:
                 print(f"Cartes du jeu: {self.jeu.carte}")
@@ -125,6 +127,7 @@ class playerWindow(QMainWindow):
         elif self.player == 2:
             
             self.paquetB = []
+            self.tmpPaquetB = []
         
         # Initialize other variable to be used by both players.
         self.comptA = 0
@@ -178,6 +181,8 @@ class playerWindow(QMainWindow):
                 self.jeu = self.message[2][0]
                 self.paquetB = self.message[2][1]
                 print("You received the data required to play!")
+                
+            self.checkPaquets()
             
     def sendMessage(self):
         
@@ -199,6 +204,8 @@ class playerWindow(QMainWindow):
         
         # Sends the data to the opponent.
         self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
+        
+        self.checkPaquets()
         
         if self.debugging:
             print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
@@ -254,6 +261,22 @@ class playerWindow(QMainWindow):
             self.ready1, self.ready2 = False, False
             self.runGame()
     
+    def checkPaquets(self):
+        
+        if self.player == 1:
+            
+            if len(self.paquetA) < 5:
+                
+                self.paquetA.extend(self.tmpPaquetA)
+                self.tmpPaquetA.clear()
+        
+        elif self.player == 2:
+            
+            if len(self.paquetB) < 5:
+                
+                self.paquetB.extend(self.tmpPaquetB)
+                self.tmpPaquetB.clear()
+    
     # The title says it all.
     def runGame(self):
         indexA = 0
@@ -289,14 +312,14 @@ class playerWindow(QMainWindow):
                 self.paquetB.pop(indexB)
                 
             if self.player == 1:
-                self.paquetA.append(carteJoueeA)
-                self.paquetA.pop(indexA)
-                self.paquetA.append(carteJoueeB)
+                self.tmpPaquetA.append(carteJoueeA)
+                self.tmpPaquetA.pop(indexA)
+                self.tmpPaquetA.append(carteJoueeB)
                 
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
                         
-                    self.paquetA.extend(self.batailleA)
-                    self.paquetA.extend(self.batailleB)
+                    self.tmpPaquetA.extend(self.batailleA)
+                    self.tmpPaquetA.extend(self.batailleB)
                     self.batailleA.clear()
                     self.batailleB.clear()
                     self.bataille = False
@@ -312,14 +335,14 @@ class playerWindow(QMainWindow):
             
             if self.player == 2:
                 
-                self.paquetB.append(carteJoueeB)
-                self.paquetB.pop(indexB)
-                self.paquetB.append(carteJoueeA)
+                self.tmpPaquetB.append(carteJoueeB)
+                self.tmpPaquetB.pop(indexB)
+                self.tmpPaquetB.append(carteJoueeA)
                 
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
                     
-                    self.paquetB.extend(self.batailleA)
-                    self.paquetB.extend(self.batailleB)
+                    self.tmpPaquetB.extend(self.batailleA)
+                    self.tmpPaquetB.extend(self.batailleB)
                     self.batailleA.clear()
                     self.batailleB.clear()
                     self.bataille = False
@@ -354,6 +377,8 @@ class playerWindow(QMainWindow):
             self.changeCurrentCardB(JeuDeCartes().images[carteJoueeB], "", ())
             
             self.round += 1
+            
+        self.checkPaquets()
 
 
 class cardWindow(QWidget):
