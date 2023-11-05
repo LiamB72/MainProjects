@@ -135,7 +135,7 @@ class playerWindow(QMainWindow):
                 print("Selected Gamemode: Target Score")
                 print(f"Target Score: {self.targetScore}")
                 self.labelGamemode.setText("Mode de jeu: Score cible")
-            else:
+            elif self.game_mode == "Running Out of Cards":
                 self.targetScore = 0
                 print("Selected Gamemode: R.O.C.")
                 self.labelGamemode.setText("Mode de jeu:     À court de cartes")
@@ -180,7 +180,6 @@ class playerWindow(QMainWindow):
         
         self.round = 1
     
-    
     # On a repeting clock of 100ms, it updates both the variables and the ui elements.
     def update(self):
         try:
@@ -192,8 +191,6 @@ class playerWindow(QMainWindow):
             # Message is a Tuple != string, so we use pickle.dumps to encode the tuple.
             # Then we use pickle.loads to decode the tuple.
             self.message = pickle.loads(data)
-            
-            print(self.message)
              
             if self.message[2] == (): # To check if the starting data has been already given. 
                 
@@ -217,25 +214,25 @@ class playerWindow(QMainWindow):
             elif self.message[2] != () and self.player == 2:
                 self.jeu = self.message[2][0]
                 self.paquetB = self.message[2][1]
-                print("You received the data required to play!")
-            
-            elif self.message[3] != () and self.player == 2:
                 
                 self.game_mode = self.message[3][0]
-                if self.game_mode[0] == "Target Score":
-                    self.targetScore = self.game_mode[1]
-                    print("Selected Gamemode: Target Score")
-                    print(f"Target Score: {self.targetScore}")
-                    self.labelGamemode.setText("Mode de jeu: Score cible")
+                if self.game_mode == 'Target Score':
+                    self.targetScore = self.message[3][1]
+                    #print("Selected Gamemode: Target Score")
+                    #print(f"Target Score: {self.targetScore}")
+                    self.labelGamemode.setText(f"Mode de jeu: Score cible de {self.targetScore} points")
                     
-                else:
+                elif self.game_mode == 'Running Out of Cards':
                     self.targetScore = 0
-                    print("Selected Gamemode: R.O.C.")
+                    #print("Selected Gamemode: R.O.C.")
                     self.labelGamemode.setText("Mode de jeu:     À court de cartes")
 
-                print(self.message[3], self.targetScore, self.game_mode)
+                #print(self.message[3], self.targetScore, self.game_mode)
+                print("Tu as reçu les informations requises pour jouer !")
+                
             self.checkPaquets()
-            
+    
+    # Sends the card played       
     def sendMessage(self):
         
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
@@ -430,7 +427,17 @@ class playerWindow(QMainWindow):
                 self.changeCurrentCardB(JeuDeCartes().images[carteJoueeB], "", ())
                 
                 self.round += 1
-                
+        
+        elif self.comptA < self.targetScore or len(self.paquetB) > 0:
+            
+            print("Joueur 1 est le/la gagnant(e) !")
+            self.labelGamemode.setText(f"Joueur 1 est le/la gagnant(e) !")
+            
+        elif self.comptB < self.targetScore or len(self.paquetA) > 0:
+          
+            print("Joueur 2 est le/la gagnant(e) !")
+            self.labelGamemode.setText(f"Joueur 2 est le/la gagnant(e) !")
+            
         self.checkPaquets()
 
 
