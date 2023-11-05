@@ -192,6 +192,8 @@ class playerWindow(QMainWindow):
             # Message is a Tuple != string, so we use pickle.dumps to encode the tuple.
             # Then we use pickle.loads to decode the tuple.
             self.message = pickle.loads(data)
+            
+            print(self.message)
              
             if self.message[2] == (): # To check if the starting data has been already given. 
                 
