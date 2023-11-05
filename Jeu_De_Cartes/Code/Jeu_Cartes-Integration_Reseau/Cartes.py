@@ -233,6 +233,7 @@ class playerWindow(QMainWindow):
                     print("Selected Gamemode: R.O.C.")
                     self.labelGamemode.setText("Mode de jeu:     À court de cartes")
 
+                print(self.message[3], self.targetScore, self.game_mode)
             self.checkPaquets()
             
     def sendMessage(self):
