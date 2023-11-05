@@ -123,7 +123,7 @@ class playerWindow(QMainWindow):
         if self.player == 1:
 
             self.jeu = JeuDeCartes()
-            for _ in range(4):
+            for _ in range(3):
                 self.jeu.battre()
 
             self.paquetA = []
