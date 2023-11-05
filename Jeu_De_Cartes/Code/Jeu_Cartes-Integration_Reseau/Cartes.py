@@ -330,7 +330,6 @@ class playerWindow(QMainWindow):
         elif carteJoueeB[0] > carteJoueeA[0]:
 
             if self.player == 1:
-                
                 self.paquetA.pop(indexA)
             
             if self.player == 2:
