@@ -105,8 +105,7 @@ class playerWindow(QMainWindow):
         
         self.sock = start_menu.sock
         self.debugging = start_menu.debugging
-        
-        
+
         if self.player == 1:
             self.sendingButtonA.clicked.connect(self.sendMessage)
             
@@ -133,8 +132,13 @@ class playerWindow(QMainWindow):
             self.game_mode = start_menu.gmChosen
             if self.game_mode == "Target Score":
                 self.targetScore = start_menu.targetScore
+                print("Selected Gamemode: Target Score")
+                print(f"Target Score: {self.targetScore}")
+                self.labelGamemode.setText("Mode de jeu: Score cible")
             else:
                 self.targetScore = 0
+                print("Selected Gamemode: R.O.C.")
+                self.labelGamemode.setText("Mode de jeu:     À court de cartes")
 
             if self.debugging:
                 print(f"Cartes du jeu: {self.jeu.carte}")
@@ -216,13 +220,15 @@ class playerWindow(QMainWindow):
             elif self.message[3] != () and self.player == 2:
                 
                 self.game_mode = self.message[3][0]
-                print(self.game_mode)
-                
                 if self.game_mode[0] == "Target Score":
                     self.targetScore = self.game_mode[1]
+                    print("Selected Gamemode: Target Score")
+                    print(f"Target Score: {self.targetScore}")
                     self.labelGamemode.setText("Mode de jeu: Score cible")
                     
                 else:
+                    self.targetScore = 0
+                    print("Selected Gamemode: R.O.C.")
                     self.labelGamemode.setText("Mode de jeu:     À court de cartes")
 
             self.checkPaquets()

@@ -336,25 +336,6 @@
      <string>Envoyer la carte choisie</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelGamemode">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>130</y>
-      <width>151</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Courier New</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Mode de jeu: </string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="showPossibleCards">
     <property name="geometry">
      <rect>
@@ -366,6 +347,28 @@
     </property>
     <property name="text">
      <string>Afficher Mes Cartes</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelGamemode">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>110</y>
+      <width>141</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Courier New</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Mode de jeu: </string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
