@@ -17,10 +17,10 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>0</y>
-      <width>451</width>
-      <height>161</height>
+      <x>0</x>
+      <y>30</y>
+      <width>311</width>
+      <height>121</height>
      </rect>
     </property>
     <property name="font">
@@ -32,7 +32,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Jeu De Carte</string>
+     <string>Jeu D'Cartes</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -41,27 +41,35 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>130</y>
+      <x>320</x>
+      <y>120</y>
       <width>201</width>
       <height>51</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="text">
-     <string>Start</string>
+     <string>Commencer !</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>10</x>
       <y>210</y>
       <width>201</width>
       <height>80</height>
      </rect>
     </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
     <property name="title">
-     <string>PlayerSelection</string>
+     <string>Selection du joueur</string>
     </property>
     <widget class="QRadioButton" name="radioButton_2">
      <property name="geometry">
@@ -93,14 +101,123 @@
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>240</y>
-      <width>151</width>
+      <x>340</x>
+      <y>60</y>
+      <width>161</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="placeholderText">
      <string>IP du second Joueur</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="gm_Selection">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>190</y>
+      <width>311</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>Modes de Jeu</string>
+    </property>
+    <widget class="QRadioButton" name="gamemode1">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Score cible</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="gamemode2">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>10</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>À court de jeu de cartes</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="confirmButton">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>50</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Confirmer</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Valeur du score cible:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>30</y>
+      <width>131</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>L'IPv4 du Joueur 1/2:</string>
     </property>
    </widget>
   </widget>

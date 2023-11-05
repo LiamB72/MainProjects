@@ -3,7 +3,7 @@ Simulateur de jeu de 52 cartes
 Liam BERGE TG1 | Started On: 21/10/2023 | Last Edit: 02/11/2023
 """
 
-from modulesFunction import JeuDeCartes, Ui_MainWindow_StartMenu
+from modulesFunction import JeuDeCartes
 from PyQt5 import uic, QtGui
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea
@@ -13,11 +13,11 @@ import socket
 import pickle
 
 
-class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
+class startMenu(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
+        uic.loadUi("Code/Jeu_Cartes-Integration_Reseau/UIs/startMenu.ui", self)
         self.pushButton.clicked.connect(self.startGame)
         
         SENDER_NAME = socket.gethostname()
@@ -32,6 +32,33 @@ class startMenu(QMainWindow, Ui_MainWindow_StartMenu):
         self.game_window = None
         self.game_window2 = None
         self.debugging = False
+        
+        self.confirmButton.clicked.connect(self.setGamemode)
+        self.radioButton.toggled.connect(self.gameSelectionEnabled)
+        self.radioButton_2.toggled.connect(self.gameSelectionDisabled)
+        self.gamemode1.toggled.connect(self.enableTargetScore)
+        self.gamemode2.toggled.connect(self.disableTargetScore)
+
+    def gameSelectionEnabled(self):
+        self.gm_Selection.setEnabled(True)
+    
+    def gameSelectionDisabled(self):
+        self.gm_Selection.setEnabled(False)
+  
+    def enableTargetScore(self):
+        self.spinBox.setEnabled(True)
+        
+    def disableTargetScore(self):
+        self.spinBox.setEnabled(False)
+    
+    def setGamemode(self):
+        
+        if self.gamemode1.isChecked():
+            self.gameMode = "Target Score"
+            self.targetScore = self.spinBox.value()
+            
+        elif self.gamemode2.isChecked():
+            self.gameMode = "Running Out of Cards"
     
     # When pressing the start button!
     def startGame(self):
@@ -103,6 +130,11 @@ class playerWindow(QMainWindow):
             self.tmpPaquetA = []
             self.paquetB = []
             
+            self.game_mode = start_menu.gameMode
+            if self.game_mode == "Target Score":
+                self.targetScore = start_menu.targetScore
+            else:
+                self.targetScore = 0
 
             if self.debugging:
                 print(f"Cartes du jeu: {self.jeu.carte}")
@@ -120,7 +152,7 @@ class playerWindow(QMainWindow):
             tempSock = self.sock
             tempSock.connect((self.RECEIVER_IP, self.RECEIVER_PORT))
 
-            data = ("", False, (self.jeu, self.paquetB))
+            data = ("", False, (self.jeu, self.paquetB), (self.game_mode, self.targetScore))
             octets = pickle.dumps(data)
             tempSock.send(octets)
 
@@ -130,6 +162,7 @@ class playerWindow(QMainWindow):
             self.tmpPaquetB = []
         
         # Initialize other variable to be used by both players.
+        
         self.comptA = 0
         self.batailleA = []
         self.chosenCardA = ()
@@ -181,7 +214,14 @@ class playerWindow(QMainWindow):
                 self.jeu = self.message[2][0]
                 self.paquetB = self.message[2][1]
                 print("You received the data required to play!")
+            
+            elif self.message[3] != () and self.player == 2:
                 
+                self.game_mode = self.message[3][0]
+                
+                if self.game_mode[0] == "Target Score":
+                    self.targetScore = self.game_mode[1]
+                    
             self.checkPaquets()
             
     def sendMessage(self):
@@ -189,12 +229,12 @@ class playerWindow(QMainWindow):
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
         if self.player == 1:
             self.ready1 = True
-            message = (self.currentCardA.text().strip(), self.ready1, ())
+            message = (self.currentCardA.text().strip(), self.ready1, (), ())
             self.sendingButtonA.setEnabled(False)
             
         elif self.player == 2:
             self.ready2 = True
-            message = (self.currentCardB.text().strip(), self.ready2, ())
+            message = (self.currentCardB.text().strip(), self.ready2, (), ())
             self.sendingButtonB.setEnabled(False)
             
         self.applyChanges()
@@ -287,96 +327,98 @@ class playerWindow(QMainWindow):
         roundWinner = ""
         self.bataille = False
         
-        if self.player == 1:
-            carteJoueeA = self.chosenCardA
-            
-            for key,_ in JeuDeCartes().images.items():
-                    if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
-                        carteJoueeB = key
-            
-            indexA = self.paquetA.index(carteJoueeA)
-            
-        elif self.player == 2:
-            
-            carteJoueeB = self.chosenCardB
-            
-            for key,_ in JeuDeCartes().images.items():
-                    if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
-                        carteJoueeA = key
-                        
-            indexB = self.paquetB.index(carteJoueeB)
-            
-        if carteJoueeA[0] > carteJoueeB[0]:
-
-            if self.player == 2:
-                self.paquetB.pop(indexB)
-                
+        if (self.comptA < self.targetScore or self.comptB < self.targetScore) or (len(self.paquetA) > 0 or len(self.paquetB) > 0):
+        
             if self.player == 1:
-                self.tmpPaquetA.append(carteJoueeA)
-                self.paquetA.pop(indexA)
-                self.tmpPaquetA.append(carteJoueeB)
+                carteJoueeA = self.chosenCardA
                 
-                if len(self.batailleA) != 0 and len(self.batailleB) != 0:
-                        
-                    self.tmpPaquetA.extend(self.batailleA)
-                    self.tmpPaquetA.extend(self.batailleB)
-                    self.batailleA.clear()
-                    self.batailleB.clear()
-                    self.bataille = False
-
-            self.comptA += 1
-            roundWinner = "Joueur 1"
-
-        elif carteJoueeB[0] > carteJoueeA[0]:
-
-            if self.player == 1:
-                self.paquetA.pop(indexA)
-            
-            if self.player == 2:
+                for key,_ in JeuDeCartes().images.items():
+                        if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
+                            carteJoueeB = key
                 
-                self.tmpPaquetB.append(carteJoueeB)
-                self.paquetB.pop(indexB)
-                self.tmpPaquetB.append(carteJoueeA)
+                indexA = self.paquetA.index(carteJoueeA)
                 
-                if len(self.batailleA) != 0 and len(self.batailleB) != 0:
-                    
-                    self.tmpPaquetB.extend(self.batailleA)
-                    self.tmpPaquetB.extend(self.batailleB)
-                    self.batailleA.clear()
-                    self.batailleB.clear()
-                    self.bataille = False
+            elif self.player == 2:
+                
+                carteJoueeB = self.chosenCardB
+                
+                for key,_ in JeuDeCartes().images.items():
+                        if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
+                            carteJoueeA = key
+                            
+                indexB = self.paquetB.index(carteJoueeB)
+                
+            if carteJoueeA[0] > carteJoueeB[0]:
 
-            self.comptB += 1
-            roundWinner = "Joueur 2"
-
-        elif carteJoueeA[0] == carteJoueeB[0]:
-            
-            self.bataille = True
-            
-            self.currentWinner.setText("***********!!BATAILLE!!***********")
-            
-            self.batailleA.append(carteJoueeA)
-            self.batailleB.append(carteJoueeB)
-            
-            if self.player == 1:
-                
-                    self.paquetA.pop(indexA)
-                    
-            if self.player == 2:
-                
+                if self.player == 2:
                     self.paquetB.pop(indexB)
                     
-        if not self.bataille:
-            
-            self.currentWinner.setText(f"   Tour n°{self.round} | Gagnant : {roundWinner}")
-            self.scoreA.setText(f"Score: {self.comptA}")
-            self.scoreB.setText(f"Score: {self.comptB}")
+                if self.player == 1:
+                    self.tmpPaquetA.append(carteJoueeA)
+                    self.paquetA.pop(indexA)
+                    self.tmpPaquetA.append(carteJoueeB)
+                    
+                    if len(self.batailleA) != 0 and len(self.batailleB) != 0:
+                            
+                        self.tmpPaquetA.extend(self.batailleA)
+                        self.tmpPaquetA.extend(self.batailleB)
+                        self.batailleA.clear()
+                        self.batailleB.clear()
+                        self.bataille = False
 
-            self.changeCurrentCardA(JeuDeCartes().images[carteJoueeA], "", ())
-            self.changeCurrentCardB(JeuDeCartes().images[carteJoueeB], "", ())
-            
-            self.round += 1
-            
+                self.comptA += 1
+                roundWinner = "Joueur 1"
+
+            elif carteJoueeB[0] > carteJoueeA[0]:
+
+                if self.player == 1:
+                    self.paquetA.pop(indexA)
+                
+                if self.player == 2:
+                    
+                    self.tmpPaquetB.append(carteJoueeB)
+                    self.paquetB.pop(indexB)
+                    self.tmpPaquetB.append(carteJoueeA)
+                    
+                    if len(self.batailleA) != 0 and len(self.batailleB) != 0:
+                        
+                        self.tmpPaquetB.extend(self.batailleA)
+                        self.tmpPaquetB.extend(self.batailleB)
+                        self.batailleA.clear()
+                        self.batailleB.clear()
+                        self.bataille = False
+
+                self.comptB += 1
+                roundWinner = "Joueur 2"
+
+            elif carteJoueeA[0] == carteJoueeB[0]:
+                
+                self.bataille = True
+                
+                self.currentWinner.setText("***********!!BATAILLE!!***********")
+                
+                self.batailleA.append(carteJoueeA)
+                self.batailleB.append(carteJoueeB)
+                
+                if self.player == 1:
+                    
+                        self.paquetA.pop(indexA)
+                        
+                if self.player == 2:
+                    
+                        self.paquetB.pop(indexB)
+                        
+            if not self.bataille:
+                
+                self.currentWinner.setText(f"   Tour n°{self.round} | Gagnant : {roundWinner}")
+                self.scoreA.setText(f"Score: {self.comptA}")
+                self.scoreB.setText(f"Score: {self.comptB}")
+
+                self.changeCurrentCardA(JeuDeCartes().images[carteJoueeA], "", ())
+                self.changeCurrentCardB(JeuDeCartes().images[carteJoueeB], "", ())
+                
+                self.round += 1
+                
         self.checkPaquets()
 
 
