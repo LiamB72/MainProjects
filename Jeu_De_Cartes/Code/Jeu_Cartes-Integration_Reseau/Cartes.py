@@ -38,11 +38,23 @@ class startMenu(QMainWindow):
         
         self.helpButton.clicked.connect(self.helpWindow)
         
+        self.confirmButton.clicked.connect(self.changeVariables)
         self.radioButton.toggled.connect(self.gameSelectionEnabled)
         self.radioButton_2.toggled.connect(self.gameSelectionDisabled)
         self.gamemode1.toggled.connect(self.enableTargetScore)
         self.gamemode2.toggled.connect(self.disableTargetScore)
 
+    def changeVariables(self):
+        
+        if self.gamemode1.isChecked():
+            
+            self.gmChosen = "Target Score"
+            self.targetScore = self.spinBox.value()
+        
+        elif self.gamemode2.isChecked():
+            
+            self.gmChosen = "Running Out of Cards"
+    
     def gameSelectionEnabled(self):
         self.gm_Selection.setEnabled(True)
     
@@ -152,7 +164,7 @@ class playerWindow(QMainWindow):
             if self.game_mode == "Target Score":
                 self.targetScore = start_menu.targetScore
                 # print("Selected Gamemode: Target Score")
-                # print(f"Target Score: {self.targetScore}")
+                print(f"Target Score: {self.targetScore}")
                 self.labelGamemode.setText(f"Mode de jeu: Score cible de {self.targetScore} points")
                     
             elif self.game_mode == 'Running Out of Cards':
@@ -336,27 +348,30 @@ class playerWindow(QMainWindow):
     # Changes the UI elements, some variables and starts the actual game when both of the players are ready.
     def applyChanges(self):
         
-        if self.ready1 and self.ready2:
-                
-            if self.player == 1:
-        
-                for key,_ in JeuDeCartes().images.items():
-                    if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
-                        self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key), self.message[0])
-                        
-                self.sendingButtonA.setEnabled(True)
-                
-                
-            elif self.player == 2:
-                for key,_ in JeuDeCartes().images.items():
-                    if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
-                        self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key), self.message[0])
-                        
-                self.sendingButtonB.setEnabled(True)
-                
-            self.showPossibleCards.setEnabled(True)
-            self.ready1, self.ready2 = False, False
-            self.runGame()
+        if (self.comptA < self.targetScore or self.comptB < self.targetScore) or (len(self.paquetA) > 0 or len(self.paquetB) > 0):
+            if self.ready1 and self.ready2:
+                    
+                if self.player == 1:
+            
+                    for key,_ in JeuDeCartes().images.items():
+                        if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
+                            self.changeCurrentCardB(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key), self.message[0])
+                            
+                    self.sendingButtonA.setEnabled(True)
+                    
+                    
+                elif self.player == 2:
+                    for key,_ in JeuDeCartes().images.items():
+                        if str(JeuDeCartes().nomCarte(key)) == self.message[0]:
+                            self.changeCurrentCardA(JeuDeCartes().images[key], JeuDeCartes().nomCarte(key), self.message[0])
+                            
+                    self.sendingButtonB.setEnabled(True)
+                    
+                self.showPossibleCards.setEnabled(True)
+                self.ready1, self.ready2 = False, False
+                self.runGame()
+        else:
+            print("La partie est finie !")
     
     def checkPaquets(self):
         
