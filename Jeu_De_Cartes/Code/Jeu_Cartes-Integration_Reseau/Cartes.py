@@ -123,7 +123,8 @@ class playerWindow(QMainWindow):
         if self.player == 1:
 
             self.jeu = JeuDeCartes()
-            self.jeu.battre()
+            for _ in range(4):
+                self.jeu.battre()
 
             self.paquetA = []
             self.tmpPaquetA = []
@@ -431,12 +432,22 @@ class playerWindow(QMainWindow):
         elif self.comptA < self.targetScore or len(self.paquetB) > 0:
             
             print("Joueur 1 est le/la gagnant(e) !")
-            self.labelGamemode.setText(f"Joueur 1 est le/la gagnant(e) !")
+            self.currentWinner.setText("   Joueur 1 est le/la gagnant(e) !")
+            self.showPossibleCards.setEnabled(False)
+            if self.player == 1:
+                self.sendingButtonA.setEnabled(False)
+            if self.player == 2:
+                self.sendingButtonB.setEnabled(False)
             
         elif self.comptB < self.targetScore or len(self.paquetA) > 0:
           
             print("Joueur 2 est le/la gagnant(e) !")
-            self.labelGamemode.setText(f"Joueur 2 est le/la gagnant(e) !")
+            self.currentWinner.setText("   Joueur 2 est le/la gagnant(e) !")
+            self.showPossibleCards.setEnabled(False)
+            if self.player == 1:
+                self.sendingButtonA.setEnabled(False)
+            if self.player == 2:
+                self.sendingButtonB.setEnabled(False)
             
         self.checkPaquets()
 
