@@ -313,7 +313,7 @@ class playerWindow(QMainWindow):
                 
             if self.player == 1:
                 self.tmpPaquetA.append(carteJoueeA)
-                self.tmpPaquetA.pop(indexA)
+                self.paquetA.pop(indexA)
                 self.tmpPaquetA.append(carteJoueeB)
                 
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
@@ -336,7 +336,7 @@ class playerWindow(QMainWindow):
             if self.player == 2:
                 
                 self.tmpPaquetB.append(carteJoueeB)
-                self.tmpPaquetB.pop(indexB)
+                self.paquetB.pop(indexB)
                 self.tmpPaquetB.append(carteJoueeA)
                 
                 if len(self.batailleA) != 0 and len(self.batailleB) != 0:
