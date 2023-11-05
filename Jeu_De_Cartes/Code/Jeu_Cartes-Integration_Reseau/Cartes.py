@@ -6,7 +6,7 @@ Liam BERGE TG1 | Started On: 21/10/2023 | Last Edit: 02/11/2023
 from modulesFunction import JeuDeCartes
 from PyQt5 import uic, QtGui
 from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QVBoxLayout, QHBoxLayout, QScrollArea
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QMessageBox, QVBoxLayout, QHBoxLayout, QScrollArea
 from PyQt5.QtGui import QIcon, QPixmap
 from functools import partial
 import socket
@@ -33,7 +33,11 @@ class startMenu(QMainWindow):
         self.game_window2 = None
         self.debugging = False
         
-        self.confirmButton.clicked.connect(self.setGamemode)
+        self.gmChosen = "Target Score"
+        self.targetScore = self.spinBox.value()
+        
+        self.helpButton.clicked.connect(self.helpWindow)
+        
         self.radioButton.toggled.connect(self.gameSelectionEnabled)
         self.radioButton_2.toggled.connect(self.gameSelectionDisabled)
         self.gamemode1.toggled.connect(self.enableTargetScore)
@@ -47,36 +51,50 @@ class startMenu(QMainWindow):
   
     def enableTargetScore(self):
         self.spinBox.setEnabled(True)
+        self.gmChosen = "Target Score"
+        self.targetScore = self.spinBox.value()
         
     def disableTargetScore(self):
         self.spinBox.setEnabled(False)
-    
-    def setGamemode(self):
+        self.gmChosen = "Running Out of Cards"
         
-        if self.gamemode1.isChecked():
-            self.gmChosen = "Target Score"
-            self.targetScore = self.spinBox.value()
-            
-        elif self.gamemode2.isChecked():
-            self.gmChosen = "Running Out of Cards"
+    def helpWindow(self):
+        
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setWindowIcon(QIcon("Resources/QTImages/information.png"))
+        msg.setText("Appuyez sur la touche \"Win\", puis tapez : \"cmd\" et appuyez sur Entrée. Ensuite, écrivez : \"ipconfig\", puis ré-appuyez sur la touche Entrée, enfin recherchez l'IPv4 que vous enverrez au deuxième joueur.\n(Cette IP ce présente ainsi: xxx.xxx.xxx.xxx, par exemple: 192.168.1.2)")
+        msg.setWindowTitle("Aide")
+        msg.exec_()
     
     # When pressing the start button!
     def startGame(self):
         self.RECEIVER_IP = self.lineEdit.text().strip()
-        self.RECEIVER_PORT = 5000
         
-        if self.radioButton.isChecked():
-            self.playerChosen = 1
-            self.game_window = playerWindow(self,1)
+        if self.RECEIVER_IP == "":
             
-        elif self.radioButton_2.isChecked():
-            self.playerChosen = 2
-            self.game_window = playerWindow(self,2)
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setWindowIcon(QIcon("Resources/QTImages/warning.png"))
+            msg.setText("Veuiller entrer l'IPv4 de l'autre joueur.")
+            msg.setWindowTitle("Attention !")
+            msg.exec_()
         
-        if self.game_window:
-            self.game_window.show()
-            
-        self.close()
+        if self.RECEIVER_IP != "":
+            self.RECEIVER_PORT = 5000
+
+            if self.radioButton.isChecked():
+                self.playerChosen = 1
+                self.game_window = playerWindow(self,1)
+
+            elif self.radioButton_2.isChecked():
+                self.playerChosen = 2
+                self.game_window = playerWindow(self,2)
+
+            if self.game_window:
+                self.game_window.show()
+
+            self.close()
 
 
 class playerWindow(QMainWindow):
@@ -123,7 +141,7 @@ class playerWindow(QMainWindow):
         if self.player == 1:
 
             self.jeu = JeuDeCartes()
-            for _ in range(3):
+            for _ in range(2):
                 self.jeu.battre()
 
             self.paquetA = []
@@ -133,12 +151,13 @@ class playerWindow(QMainWindow):
             self.game_mode = start_menu.gmChosen
             if self.game_mode == "Target Score":
                 self.targetScore = start_menu.targetScore
-                print("Selected Gamemode: Target Score")
-                print(f"Target Score: {self.targetScore}")
-                self.labelGamemode.setText("Mode de jeu: Score cible")
-            elif self.game_mode == "Running Out of Cards":
+                # print("Selected Gamemode: Target Score")
+                # print(f"Target Score: {self.targetScore}")
+                self.labelGamemode.setText(f"Mode de jeu: Score cible de {self.targetScore} points")
+                    
+            elif self.game_mode == 'Running Out of Cards':
                 self.targetScore = 0
-                print("Selected Gamemode: R.O.C.")
+                # print("Selected Gamemode: R.O.C.")
                 self.labelGamemode.setText("Mode de jeu:     À court de cartes")
 
             if self.debugging:
@@ -239,26 +258,55 @@ class playerWindow(QMainWindow):
         # Whenever the player window is 1 or 2, it sends the correct text to the receiver's IP.
         if self.player == 1:
             self.ready1 = True
-            message = (self.currentCardA.text().strip(), self.ready1, (), ())
-            self.sendingButtonA.setEnabled(False)
+            if self.currentCardA.text().strip() == "":
+                self.warningBox("Veuiller selectionner une carte.", "Resources/QTImages/warning.png")
+                cardNotSelected = True
+            
+            elif self.currentCardA.text().strip() != "":
+                cardNotSelected = False
+            
+            if cardNotSelected == False:  
+                message = (self.currentCardA.text().strip(), self.ready1, (), ())
+                self.sendingButtonA.setEnabled(False)
             
         elif self.player == 2:
             self.ready2 = True
-            message = (self.currentCardB.text().strip(), self.ready2, (), ())
-            self.sendingButtonB.setEnabled(False)
             
-        self.applyChanges()
+            if self.currentCardB.text().strip() == "":
+                self.warningBox("Veuiller selectionner une carte.", "Resources/QTImages/warning.png")
+                cardNotSelected = True
+            
+            elif self.currentCardB.text().strip() != "":
+                cardNotSelected = False
+                
+            if cardNotSelected == False:
+                message = (self.currentCardB.text().strip(), self.ready2, (), ())            
+                self.sendingButtonB.setEnabled(False)
         
-        # Explained in self.update()
-        data = pickle.dumps(message)
+        if cardNotSelected == False:
+            self.showPossibleCards.setEnabled(False)                
+            self.applyChanges()
+
+            # Explained in self.update()
+            data = pickle.dumps(message)
+
+            # Sends the data to the opponent.
+            self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
+
+            self.checkPaquets()
+
+            if self.debugging:
+                print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
+    
+    # Creates a warning box that warns the player of an action!
+    def warningBox(self, message:str, path:str):
         
-        # Sends the data to the opponent.
-        self.sock.sendto(data, (self.RECEIVER_IP, self.RECEIVER_PORT))
-        
-        self.checkPaquets()
-        
-        if self.debugging:
-            print(f"---\nMessage sent: \"{message}\" \nReceiver's IP: {self.RECEIVER_IP}\nReceiver's Port : {self.RECEIVER_PORT}")
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setWindowIcon(QIcon(path))
+        msg.setText(message)
+        msg.setWindowTitle("Attention !")
+        msg.exec_()
     
     # Shows the window which contains the deck of the player opening the window.
     def showCards(self):
@@ -285,8 +333,7 @@ class playerWindow(QMainWindow):
         self.currentCardB.setText(newCard)
         self.chosenCardB = data
     
-    # Changes the UI elements, some variables and starts the actual game when both
-    # of the players are ready.
+    # Changes the UI elements, some variables and starts the actual game when both of the players are ready.
     def applyChanges(self):
         
         if self.ready1 and self.ready2:
@@ -307,7 +354,7 @@ class playerWindow(QMainWindow):
                         
                 self.sendingButtonB.setEnabled(True)
                 
-                
+            self.showPossibleCards.setEnabled(True)
             self.ready1, self.ready2 = False, False
             self.runGame()
     

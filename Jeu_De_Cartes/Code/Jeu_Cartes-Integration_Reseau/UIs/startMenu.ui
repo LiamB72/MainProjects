@@ -106,7 +106,7 @@
      <rect>
       <x>340</x>
       <y>60</y>
-      <width>161</width>
+      <width>171</width>
       <height>31</height>
      </rect>
     </property>
@@ -227,6 +227,22 @@
     </property>
     <property name="text">
      <string>L'IPv4 du Joueur 1/2:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="helpButton">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>30</y>
+      <width>41</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Aide</string>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>

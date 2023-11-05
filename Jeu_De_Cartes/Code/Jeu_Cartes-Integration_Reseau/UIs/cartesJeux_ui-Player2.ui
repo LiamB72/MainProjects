@@ -100,8 +100,8 @@
       <rect>
        <x>250</x>
        <y>120</y>
-       <width>121</width>
-       <height>21</height>
+       <width>171</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="font">
@@ -302,8 +302,8 @@
       <rect>
        <x>30</x>
        <y>140</y>
-       <width>121</width>
-       <height>21</height>
+       <width>161</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="font">
@@ -352,8 +352,8 @@
    <widget class="QLabel" name="labelGamemode">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>440</y>
+      <x>510</x>
+      <y>410</y>
       <width>141</width>
       <height>51</height>
      </rect>
