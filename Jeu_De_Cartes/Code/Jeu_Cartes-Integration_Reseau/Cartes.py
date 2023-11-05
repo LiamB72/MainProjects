@@ -54,11 +54,11 @@ class startMenu(QMainWindow):
     def setGamemode(self):
         
         if self.gamemode1.isChecked():
-            self.gameMode = "Target Score"
+            self.gmChosen = "Target Score"
             self.targetScore = self.spinBox.value()
             
         elif self.gamemode2.isChecked():
-            self.gameMode = "Running Out of Cards"
+            self.gmChosen = "Running Out of Cards"
     
     # When pressing the start button!
     def startGame(self):
@@ -130,7 +130,7 @@ class playerWindow(QMainWindow):
             self.tmpPaquetA = []
             self.paquetB = []
             
-            self.game_mode = start_menu.gameMode
+            self.game_mode = start_menu.gmChosen
             if self.game_mode == "Target Score":
                 self.targetScore = start_menu.targetScore
             else:
@@ -194,7 +194,6 @@ class playerWindow(QMainWindow):
                 if self.player == 1:
                     if self.message[1]:
                         self.ready2 = True
-                        self.labelReady.setText("Joueur 2: Prêt")
                     
                     if self.debugging:
                         print("To Player1: ",self.message, " | ", type(self.message))
@@ -202,7 +201,6 @@ class playerWindow(QMainWindow):
                 elif self.player == 2:
                     if self.message[1]:
                         self.ready1 = True
-                        self.labelReady.setText("Joueur 1: Prêt")
                         
                     if self.debugging:
                         print("To Player2: ",self.message, " | ", type(self.message))
@@ -218,10 +216,15 @@ class playerWindow(QMainWindow):
             elif self.message[3] != () and self.player == 2:
                 
                 self.game_mode = self.message[3][0]
+                print(self.game_mode)
                 
                 if self.game_mode[0] == "Target Score":
                     self.targetScore = self.game_mode[1]
+                    self.labelGamemode.setText("Mode de jeu: Score cible")
                     
+                else:
+                    self.labelGamemode.setText("Mode de jeu:     À court de cartes")
+
             self.checkPaquets()
             
     def sendMessage(self):

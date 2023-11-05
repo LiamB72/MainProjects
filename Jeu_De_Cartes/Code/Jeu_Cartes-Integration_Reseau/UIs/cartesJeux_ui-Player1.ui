@@ -336,7 +336,7 @@
      <string>Envoyer la carte choisie</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelReady">
+   <widget class="QLabel" name="labelGamemode">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -352,7 +352,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Joueur 2 :</string>
+     <string>Mode de jeu: </string>
     </property>
    </widget>
    <widget class="QPushButton" name="showPossibleCards">
