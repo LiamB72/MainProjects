@@ -37,7 +37,7 @@ class JeuDeCartes(object):
         return carteTirer
 
 
-class joueur:
+class Joueur:
     
     def __init__(self, name:int):
         
