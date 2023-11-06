@@ -270,7 +270,7 @@ class BlackJack(JeuDeCartes):
         self.player.intoName()
         self.dealer.intoName()
         print(self.player)
-        print(f'La 2nd carte du {self.dlName} est: {self.dealer.deckName[1]}')
+        print(f'La 2nd carte du {self.dlName} est:\n{self.dealer.deckName[1]}')
         
         self.playerTurn(self.bot)
         if self.bot == "H":
