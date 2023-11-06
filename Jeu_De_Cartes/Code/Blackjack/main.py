@@ -1,7 +1,7 @@
 ##################################################################################
 # Par: Liam BERGE TG1 | Started Project On: 30/10/2023 | Latest Edit: 06/11/2023
 ##################################################################################
-from modules import JeuDeCartes, joueur
+from modules import JeuDeCartes, Joueur
 
 
 # Objective:
@@ -29,10 +29,10 @@ class BlackJack(JeuDeCartes):
         
         JeuDeCartes().battre(self.newList)
         
-        self.player = joueur("Joueur 1")
+        self.player = Joueur("Joueur 1")
         self.plHand = self.player.deck
         self.plName = self.player.name
-        self.dealer = joueur("Croupier")
+        self.dealer = Joueur("Croupier")
         self.dlHand = self.dealer.deck
         self.dlName = self.dealer.name
         
