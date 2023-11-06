@@ -189,6 +189,8 @@ class playerWindow(QMainWindow):
             tempSock.connect((self.RECEIVER_IP, self.RECEIVER_PORT))
 
             data = ("", False, (self.jeu), (self.game_mode, self.targetScore), (self.paquetA, self.paquetB))
+            
+            print(data)
             octets = pickle.dumps(data)
             tempSock.send(octets)
 
@@ -223,7 +225,7 @@ class playerWindow(QMainWindow):
             # Message is a Tuple != string, so we use pickle.dumps to encode the tuple.
             # Then we use pickle.loads to decode the tuple.
             self.message = pickle.loads(data)
-        
+            print(self.message)
             
             if self.player == 1:
                 if self.message[1]:
