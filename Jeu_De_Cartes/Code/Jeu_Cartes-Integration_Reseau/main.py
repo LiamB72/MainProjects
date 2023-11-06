@@ -38,11 +38,21 @@ class startMenu(QMainWindow):
         
         self.helpButton.clicked.connect(self.helpWindow)
         
+        self.confirmButton.clicked.connect(self.setVariables)
         self.radioButton.toggled.connect(self.gameSelectionEnabled)
         self.radioButton_2.toggled.connect(self.gameSelectionDisabled)
         self.gamemode1.toggled.connect(self.enableTargetScore)
         self.gamemode2.toggled.connect(self.disableTargetScore)
 
+    def setVariables(self):
+        
+        if self.gamemode1.isChecked():
+            self.gmChosen = "Target Score"
+            self.targetScore = self.spinBox.value()
+            
+        elif self.gamemode2.isChecked():
+            self.gmChosen = "Running Out of Cards"
+    
     def gameSelectionEnabled(self):
         self.gm_Selection.setEnabled(True)
     
@@ -51,15 +61,11 @@ class startMenu(QMainWindow):
   
     def enableTargetScore(self):
         self.spinBox.setEnabled(True)
-        self.gmChosen = "Target Score"
-        self.targetScore = self.spinBox.value()
         
     def disableTargetScore(self):
         self.spinBox.setEnabled(False)
-        self.gmChosen = "Running Out of Cards"
         
     def helpWindow(self):
-        
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Information)
         msg.setWindowIcon(QIcon("Resources/QTImages/information.png"))
@@ -384,7 +390,7 @@ class playerWindow(QMainWindow):
         roundWinner = ""
         self.bataille = False
         
-        if (self.comptA < self.targetScore or self.comptB < self.targetScore) or (len(self.paquetA) > 0 or len(self.paquetB) > 0):
+        while (self.comptA < self.targetScore or self.comptB < self.targetScore) or (len(self.paquetA) > 0 or len(self.paquetB) > 0):
         
             if self.player == 1:
                 carteJoueeA = self.chosenCardA
@@ -476,7 +482,7 @@ class playerWindow(QMainWindow):
                 
                 self.round += 1
         
-        elif self.comptA < self.targetScore or len(self.paquetB) > 0:
+        if self.comptA < self.targetScore or len(self.paquetB) > 0:
             
             print("Joueur 1 est le/la gagnant(e) !")
             self.currentWinner.setText("   Joueur 1 est le/la gagnant(e) !")
