@@ -56,4 +56,4 @@ class Joueur:
         
     def __repr__(self):
         self.intoName()
-        return f"La main du {self.name} est : {', '.join(self.deckName)}"
+        return f"La main du {self.name} est :\n{', '.join(self.deckName)}"
