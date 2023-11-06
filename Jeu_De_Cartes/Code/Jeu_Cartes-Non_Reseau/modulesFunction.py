@@ -156,7 +156,7 @@ class Ui_MainWindow(object):
         self.playerA.setText(_translate("MainWindow", "Joueur 1:"))
         self.currentCardB.setText(_translate("MainWindow", "Carte Actuel :"))
         self.PlayerB.setText(_translate("MainWindow", "Joueur 2:"))
-        self.currentWinner.setText(_translate("MainWindow", "Round N | WINNER : PLACEHOLDER"))
+        self.currentWinner.setText(_translate("MainWindow", ""))
         self.scoreA.setText(_translate("MainWindow", "Score : "))
         self.scoreB.setText(_translate("MainWindow", "Score : "))
 
