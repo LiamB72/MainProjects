@@ -1,5 +1,4 @@
 from random import shuffle
-from PyQt5 import QtCore, QtGui, QtWidgets
 
 class JeuDeCartes(object):
 
