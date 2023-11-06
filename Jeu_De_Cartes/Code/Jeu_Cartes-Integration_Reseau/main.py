@@ -42,16 +42,12 @@ class startMenu(QMainWindow):
         self.radioButton.toggled.connect(self.gameSelectionEnabled)
         self.radioButton_2.toggled.connect(self.gameSelectionDisabled)
         self.gamemode1.toggled.connect(self.enableTargetScore)
-        self.gamemode2.toggled.connect(self.disableTargetScore)
 
     def setVariables(self):
         
         if self.gamemode1.isChecked():
             self.gmChosen = "Target Score"
             self.targetScore = self.spinBox.value()
-            
-        elif self.gamemode2.isChecked():
-            self.gmChosen = "Running Out of Cards"
     
     def gameSelectionEnabled(self):
         self.gm_Selection.setEnabled(True)
@@ -61,9 +57,7 @@ class startMenu(QMainWindow):
   
     def enableTargetScore(self):
         self.spinBox.setEnabled(True)
-        
-    def disableTargetScore(self):
-        self.spinBox.setEnabled(False)
+
         
     def helpWindow(self):
         msg = QMessageBox()
@@ -160,11 +154,6 @@ class playerWindow(QMainWindow):
                 # print("Selected Gamemode: Target Score")
                 # print(f"Target Score: {self.targetScore}")
                 self.labelGamemode.setText(f"Mode de jeu: Score cible de {self.targetScore} points")
-                    
-            elif self.game_mode == 'Running Out of Cards':
-                self.targetScore = 0
-                # print("Selected Gamemode: R.O.C.")
-                self.labelGamemode.setText("Mode de jeu:     À court de cartes")
 
             if self.debugging:
                 print(f"Cartes du jeu: {self.jeu.carte}")
@@ -247,11 +236,6 @@ class playerWindow(QMainWindow):
                     #print("Selected Gamemode: Target Score")
                     #print(f"Target Score: {self.targetScore}")
                     self.labelGamemode.setText(f"Mode de jeu: Score cible de {self.targetScore} points")
-                    
-                elif self.game_mode == 'Running Out of Cards':
-                    self.targetScore = 0
-                    #print("Selected Gamemode: R.O.C.")
-                    self.labelGamemode.setText("Mode de jeu:     À court de cartes")
 
                 #print(self.message[3], self.targetScore, self.game_mode)
                 print("Tu as reçu les informations requises pour jouer !")
@@ -390,7 +374,7 @@ class playerWindow(QMainWindow):
         roundWinner = ""
         self.bataille = False
         
-        while (self.comptA < self.targetScore or self.comptB < self.targetScore) or (len(self.paquetA) > 0 or len(self.paquetB) > 0):
+        while (self.comptA < self.targetScore or self.comptB < self.targetScore):
         
             if self.player == 1:
                 carteJoueeA = self.chosenCardA
@@ -482,7 +466,7 @@ class playerWindow(QMainWindow):
                 
                 self.round += 1
         
-        if self.comptA < self.targetScore or len(self.paquetB) > 0:
+        if self.comptA < self.targetScore:
             
             print("Joueur 1 est le/la gagnant(e) !")
             self.currentWinner.setText("   Joueur 1 est le/la gagnant(e) !")
@@ -492,7 +476,7 @@ class playerWindow(QMainWindow):
             if self.player == 2:
                 self.sendingButtonB.setEnabled(False)
             
-        elif self.comptB < self.targetScore or len(self.paquetA) > 0:
+        elif self.comptB < self.targetScore:
           
             print("Joueur 2 est le/la gagnant(e) !")
             self.currentWinner.setText("   Joueur 2 est le/la gagnant(e) !")

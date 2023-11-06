@@ -150,19 +150,6 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QRadioButton" name="gamemode2">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>10</y>
-       <width>161</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>À court de jeu de cartes</string>
-     </property>
-    </widget>
     <widget class="QSpinBox" name="spinBox">
      <property name="geometry">
       <rect>
@@ -183,14 +170,14 @@
      <property name="geometry">
       <rect>
        <x>160</x>
-       <y>50</y>
-       <width>131</width>
+       <y>40</y>
+       <width>111</width>
        <height>41</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="text">
