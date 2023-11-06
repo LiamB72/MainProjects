@@ -1,4 +1,8 @@
+##################################################################################
+# Par: Liam BERGE TG1 | Started Project On: 30/10/2023 | Latest Edit: 06/11/2023
+##################################################################################
 from modules import JeuDeCartes, joueur
+
 
 # Objective:
 #   Goal : Beat the dealer
@@ -25,11 +29,6 @@ class BlackJack(JeuDeCartes):
         
         JeuDeCartes().battre(self.newList)
         
-        self.moneyOnTheLine = str(input("Avec Argent Misé? (Y/N): "))
-        if self.moneyOnTheLine == "Y":
-            self.initialBet = float(input("Montant misé: "))
-            self.currentBet = self.initialBet
-        
         self.player = joueur("Joueur 1")
         self.plHand = self.player.deck
         self.plName = self.player.name
@@ -40,8 +39,6 @@ class BlackJack(JeuDeCartes):
         self.cardValue = {(x, y): x + 2 for x in range(9) for y in range(4)}
         self.cardValue.update({(x, y): 10 for x in range(9, 12) for y in range(4)})
         self.cardValue.update({(12, y): 11 for y in range(4)})
-
-        self.bot = input("Human or Bot? (H)/(B): ")
         
         self.run()
 
@@ -55,17 +52,15 @@ class BlackJack(JeuDeCartes):
             while pAct != "S":
                 if self.moneyOnTheLine == "Y":
                     pAct = input(f"\n{self.plName}: Hit (H) | Stand (S) | Double (D) | Split (SP): ")
-                    match pAct:
-                        case "H":
+                    if pAct == "H":
                             self.playerH_Act()
-                        case "D":
+                    elif pAct == "D":
                             self.d_Act()
-                        case "SP":
+                    elif pAct == "SP":
                             self.sp_Act()
                 else:
                     pAct = input(f"\n{self.plName}: Hit (H) | Stand (S): ")
-                    match pAct:
-                        case "H":
+                    if pAct == "H":
                             self.playerH_Act()
                             
                 print(f"\n<<--------->>\n{self.player}\n<<--------->>")
@@ -258,6 +253,15 @@ class BlackJack(JeuDeCartes):
     
     def run(self):
         
+        print("-+-+- /\ BLACKJACK /\ -+-+-")
+        
+        self.moneyOnTheLine = str(input("\nJouer avec l'argent misé? (Y/N): "))
+        if self.moneyOnTheLine == "Y":
+            self.initialBet = float(input("\nMontant misé (en €): "))
+            self.currentBet = self.initialBet
+        
+        self.bot = input("\nJouer ou Regarder jouer? (H)/(B): ")
+        
         for i in range(2):
             
             self.player.addCards(self.newList)
@@ -265,7 +269,7 @@ class BlackJack(JeuDeCartes):
         
         self.player.intoName()
         self.dealer.intoName()
-        print(f'\nLa main du {self.plName} est: {(", ".join(self.player.deckName[i] for i in range(len(self.plHand))))}')
+        print(self.player)
         print(f'La 2nd carte du {self.dlName} est: {self.dealer.deckName[1]}')
         
         self.playerTurn(self.bot)
@@ -276,7 +280,7 @@ class BlackJack(JeuDeCartes):
         print()
         print(self.player)
         print(self.dealer)
-        print(res)
+        # print(res)
         print(self.checkWinner(res))
         
         
