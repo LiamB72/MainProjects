@@ -86,7 +86,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 
                 carteJoueeB = jeuB.tirer()
             
-            self.currentWinner.setText(f"Round No.{roundNb} | WINNER: {roundWinner}")
+            self.currentWinner.setText(f" Tour No.{roundNb} | Gagnant: {roundWinner}")
             self.changeImageCarte(self.images[carteJoueeA], self.images[carteJoueeB])
             self.changeTexte(jeuA.nomCarte(carteJoueeA),jeuB.nomCarte(carteJoueeB))
             roundNb += 1
