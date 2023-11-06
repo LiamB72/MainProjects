@@ -244,7 +244,7 @@ if run == 1:
     print()
     print(jeux.carte)
 
-    #Q4.2 Tirage de toutes le cartes
+    #Q4.2 Tirage de toutes le cartes: FAIT!
     print("\n\nQ4.2:")
     jeux = JeuDeCartes()
     jeux.battre()
