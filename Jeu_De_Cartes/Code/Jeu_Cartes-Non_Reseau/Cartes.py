@@ -58,9 +58,7 @@ class Window(QMainWindow, Ui_MainWindow):
 
         matchViewing = input("Regarder le match: (Y/N): ")
         matchViewing.capitalize()
-        HumanWatching = True if matchViewing == "Y" else False
-        if matchViewing == "N":
-            n = float(input("Vitesse du jeu (en secondes): "))
+        n = float(input("Vitesse du jeu (en secondes): "))
         roundNb = 0
         roundWinner = "Noone"
         
@@ -109,10 +107,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 carteJoueeB = jeuB.tirer()
             
             print(f"\njoueur 1 a tirer: {jeuA.nomCarte(carteJoueeA)}\njoueur 2 a tirer: {jeuB.nomCarte(carteJoueeB)}")
-            if HumanWatching:
-                sleep(2)
-            else:
-                sleep(n)
+            sleep(n) 
             
             if carteJoueeA[0] > carteJoueeB[0]:
                 
@@ -134,10 +129,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 
                 self.currentWinner.setText(f"Bataille !!!")
                 
-                if HumanWatching:
-                    sleep(3)
-                else:
-                    sleep(n)
+                sleep(n)
                 
                 batailleA.append(carteJoueeA)
                 batailleB.append(carteJoueeB)
@@ -146,10 +138,7 @@ class Window(QMainWindow, Ui_MainWindow):
                 carteJoueeB = jeuB.tirer()
                 
                 print(f"\njoueur 1 a tirer: {jeuA.nomCarte(carteJoueeA)}\njoueur 2 a tirer: {jeuB.nomCarte(carteJoueeB)}")
-                if HumanWatching:
-                    sleep(2)
-                else:
-                    sleep(n)    
+                sleep(n)    
                 
                 
                 if carteJoueeA[0] > carteJoueeB[0]:
@@ -183,10 +172,7 @@ class Window(QMainWindow, Ui_MainWindow):
             print(f"Joueur 1: {comptA} ------- Joueur 2: {comptB}\n")
             self.scoreA.setText(f"Score: {comptA}")
             self.scoreB.setText(f"Score: {comptB}")
-            if HumanWatching:
-                sleep(2)
-            else:
-                sleep(n)
+            sleep(n)
             
             carteJoueeA = jeuA.tirer()
             carteJoueeB = jeuB.tirer()
