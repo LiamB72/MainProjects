@@ -1,4 +1,4 @@
-from scripts.importedModules import *
+from data.scripts.importedModules import *
 
 class Player(pygame.sprite.Sprite):
 

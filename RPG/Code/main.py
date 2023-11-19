@@ -2,8 +2,8 @@
 Programme réalisé par BERGE Liam, TG1 | Project Start: 19/11/2023 | Latest Edit: 19/11/2023
 """
 
-from scripts.importedModules import *
-from scripts.classes import Player
+from data.scripts.importedModules import *
+from data.scripts.classes import Player
 
 NB_TILES = 666
 TITLE_SIZE=32 
