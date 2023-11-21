@@ -374,7 +374,7 @@ class playerWindow(QMainWindow):
         roundWinner = ""
         self.bataille = False
         
-        while (self.comptA < self.targetScore or self.comptB < self.targetScore):
+        if (self.comptA < self.targetScore or self.comptB < self.targetScore):
         
             if self.player == 1:
                 carteJoueeA = self.chosenCardA
@@ -466,7 +466,7 @@ class playerWindow(QMainWindow):
                 
                 self.round += 1
         
-        if self.comptA < self.targetScore:
+        elif self.comptA < self.targetScore:
             
             print("Joueur 1 est le/la gagnant(e) !")
             self.currentWinner.setText("   Joueur 1 est le/la gagnant(e) !")
