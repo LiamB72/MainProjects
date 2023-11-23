@@ -3,7 +3,7 @@ Programme réalisé par BERGE Liam, TG1 | Project Start: 19/11/2023 | Latest Edi
 """
 
 from data.scripts.importedModules import *
-from data.scripts.classes import Player
+from data.scripts.classes import Player, Wizard, Warrior
 
 NB_TILES = 666
 TITLE_SIZE=32 
@@ -100,6 +100,8 @@ aventuriers.add(perso)
 mechants = pygame.sprite.Group()
 mechants.add(perso2)
 mechants.add(perso3)
+
+wizard = Wizard("Mage", 100, 100, 0, 1)
 
 
 

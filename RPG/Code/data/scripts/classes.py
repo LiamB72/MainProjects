@@ -1,4 +1,7 @@
-from data.scripts.importedModules import *
+if not (__name__ == "__main__"):
+    from data.scripts.importedModules import *
+else:
+    from importedModules import *
 
 class Player(pygame.sprite.Sprite):
 
@@ -128,7 +131,7 @@ class Warrior(Player):
             print("lL'adversaire est mort.")
             self.increaseEXP(randint(10, 40), self.maxMana, 10)
             
-class Magicien(Player):
+class Wizard(Player):
     """
     Inflige des dégats au mechant si celui-ci est vivant et que le magicien dispose de mana.\n
     Incrémente le nombre de points d'expérience.\n
@@ -164,14 +167,20 @@ class Magicien(Player):
             
     def combat(self,opponent):
         
-        attack_strenght = randint(1, 4)
+        attack_strenght = randint(1, 1)
         damage = int(attack_strenght * self.niveau * 2 - opponent.niveau)
+        print(damage)
+        if attack_strenght == 1 and self.mana > 0:
+            
+            damage -= damage * 2
+            self.currentHP -= damage
+            print(damage)
         
-        if opponent.hp - damage >= 0 and self.mana > 0:
+        elif opponent.hp - damage > 0 and self.mana > 0 and attack_strenght > 1:
             opponent.hp -= damage
             self.mana -= 1
             print("dégâts du magicien sur le méchant est de ",damage)
-        else:
+        elif opponent.hp - damage <= 0 and self.mana > 0 and attack_strenght > 1:
             opponent.hp = 0
             print("L'adversaire est mort.")
             self.increaseEXP(randint(10, 40), self.maxMana, 10)
