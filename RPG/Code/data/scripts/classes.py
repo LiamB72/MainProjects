@@ -16,11 +16,11 @@ class Player(pygame.sprite.Sprite):
         self.rect.x = self.x * size
         self.rect.y = self.y * size
         
-        self.nom     = stats[0]
-        self.currentHP     = stats[1]
-        self.maxHP  = stats[2]
-        self.exp      = stats[3]
-        self.niveau  = stats[4]
+        self.nom         = stats[0]
+        self.currentHP   = stats[1]
+        self.maxHP       = stats[2]
+        self.exp         = stats[3]
+        self.niveau      = stats[4]
         
         self.requiredEXP = 100
 
@@ -45,10 +45,10 @@ class Player(pygame.sprite.Sprite):
             
             self.currentHP -= a0
             
-    def increaseEXP(self, a0:int, stat):
+    def increaseEXP(self, a0:int, a1:int, a2:int):
         """
         Increases the experience points of the player by a0 amount (int)\n
-        If player has increase in LV, it increased a stat given.
+        If player has increase in LV, it increased a1 given by a2 amount.
         """
         if self.exp < self.requiredEXP:
             self.exp += a0
@@ -56,7 +56,7 @@ class Player(pygame.sprite.Sprite):
         else:
             self.exp = (self.exp + self.a0) - self.requiredEXP
             self.requiredEXP += 100
-            stat += 1
+            a1 += a2
             
     
     def checkStatus(self) -> bool:
@@ -106,7 +106,6 @@ class Warrior(Player):
     incrémente le nombre de points d'expérience correspondant aux dégâts infligés\n
     Monte si nécessaire en niveau en fonction du nombre de points xp\n
     retire de la vie au méchant\n
-    s̴i̴ ̴l̴e̴ ̴m̴é̴c̴h̴a̴n̴t̴ ̴e̴s̴t̴ ̴m̴o̴r̴t̴ ̴a̴u̴g̴m̴e̴n̴t̴e̴r̴ ̴l̴a̴ ̴f̴o̴r̴c̴e̴ ̴d̴e̴ ̴1̴ ̴d̴u̴ ̴g̴u̴e̴r̴r̴i̴e̴r̴\n
     Si le guerrier monte en niveau il augement d'un point de force.
     """
     
@@ -116,19 +115,63 @@ class Warrior(Player):
         
         self.strength = strength
     
-    def StrengthIncrease(self):
-        
-        self.strength += 1
-    
     def combat(self, opponent):
         
-        attackStrength = randint(1, 4)
+        attack_strenght = randint(1, 4)
+        damage = int(attack_strenght * self.niveau * 2 - opponent.niveau)
         
-        damagePoints = attackStrength * self.niveau * self.strength - opponent.niveau
-        if opponent.currentHP - damagePoints > 0:
-            print(f"Damage Inflit to {opponent}: {damagePoints}")
-            opponent.currentHP -= damagePoints
+        if opponent.hp - damage >= 0 and self.mana > 0:
+            opponent.hp -= damage
+            print("dégâts du chevalier sur le méchant est de ",damage)
+        else:
+            opponent.hp = 0
+            print("lL'adversaire est mort.")
+            self.increaseEXP(randint(10, 40), self.maxMana, 10)
             
-        elif opponent.currentHP - damagePoints <= 0:
+class Magicien(Player):
+    """
+    Inflige des dégats au mechant si celui-ci est vivant et que le magicien dispose de mana.\n
+    Incrémente le nombre de points d'expérience.\n
+    Monte si nécessaire en niveau en fonction du nombre de points xp.\n
+    Retire de la vie au méchant et diminue de 1 self.mana (consommation de magie)\n
+    Si le méchant est mort augmenter self.maxMana de 10 du magicien.
+    """
+    
+    def __init__(self, nom, mana, vie, xp, niveau):
+        super().__init__(nom, vie, xp, niveau)
+        self.maxMana = mana
+        self.mana = mana
+    
+    def ajouterMana(self):
+        #ajoute 1 en self.mana sans dépasser self.maxMana
+        if self.mana + 1 <= self.maxHP:
+            self.mana += 1
+        else:
+            print("Capacité max de mana déjà atteinte.")
+    
+    def retirerMana(self,mana):
+        #retire mana à self.mana sans descendre en dessous de 0
+        #retourne vrai si le magicien à lancé un sort
+        #retourne faux si le magicien ne peut plus lancer de sort
+        if self.mana - 1 >= 0:
             
-            self.increaseEXP(randint(10, 40), self.strength)
+            self.mana -= 1
+            return True
+        
+        else:
+            print("Plus de mana.")
+            return False
+            
+    def combat(self,opponent):
+        
+        attack_strenght = randint(1, 4)
+        damage = int(attack_strenght * self.niveau * 2 - opponent.niveau)
+        
+        if opponent.hp - damage >= 0 and self.mana > 0:
+            opponent.hp -= damage
+            self.mana -= 1
+            print("dégâts du magicien sur le méchant est de ",damage)
+        else:
+            opponent.hp = 0
+            print("L'adversaire est mort.")
+            self.increaseEXP(randint(10, 40), self.maxMana, 10)

@@ -12,7 +12,6 @@ from functools import partial
 import socket
 import pickle
 
-
 class startMenu(QMainWindow):
     
     def __init__(self):
@@ -374,7 +373,7 @@ class playerWindow(QMainWindow):
         roundWinner = ""
         self.bataille = False
         
-        while (self.comptA < self.targetScore or self.comptB < self.targetScore):
+        if (self.comptA < self.targetScore or self.comptB < self.targetScore):
         
             if self.player == 1:
                 carteJoueeA = self.chosenCardA
@@ -384,6 +383,9 @@ class playerWindow(QMainWindow):
                             carteJoueeB = key
                 
                 indexA = self.paquetA.index(carteJoueeA)
+                
+                print(self.paquetA)
+                print(carteJoueeA)
                 
             elif self.player == 2:
                 
@@ -395,6 +397,7 @@ class playerWindow(QMainWindow):
                             
                 indexB = self.paquetB.index(carteJoueeB)
                 
+             
             if carteJoueeA[0] > carteJoueeB[0]:
 
                 if self.player == 2:
@@ -460,13 +463,10 @@ class playerWindow(QMainWindow):
                 self.currentWinner.setText(f"   Tour n°{self.round} | Gagnant : {roundWinner}")
                 self.scoreA.setText(f"Score: {self.comptA}")
                 self.scoreB.setText(f"Score: {self.comptB}")
-
-                self.changeCurrentCardA(JeuDeCartes().images[carteJoueeA], "", ())
-                self.changeCurrentCardB(JeuDeCartes().images[carteJoueeB], "", ())
                 
                 self.round += 1
         
-        if self.comptA < self.targetScore:
+        elif self.comptA < self.targetScore:
             
             print("Joueur 1 est le/la gagnant(e) !")
             self.currentWinner.setText("   Joueur 1 est le/la gagnant(e) !")
@@ -485,7 +485,10 @@ class playerWindow(QMainWindow):
                 self.sendingButtonA.setEnabled(False)
             if self.player == 2:
                 self.sendingButtonB.setEnabled(False)
-            
+        
+        self.changeCurrentCardA(JeuDeCartes().images[carteJoueeA], "", ())
+        self.changeCurrentCardB(JeuDeCartes().images[carteJoueeB], "", ())
+        
         self.checkPaquets()
 
 

@@ -1,5 +1,5 @@
 """
-Programme réalisé par BERGE Liam, TG1 | Project Start: 19/11/2023 | Latest Edit: 19/11/2023
+Programme réalisé par BERGE Liam, TG1 | Project Start: 19/11/2023 | Latest Edit: 23/11/2023
 """
 
 from data.scripts.importedModules import *
@@ -30,12 +30,12 @@ decorationTiles=[[  0,  0,253,  0,  0,  0,  0,  0],
                  [  0,  0,  0,  0,  0,  0,  0,  0],
                  [  0,  0,  0,  0,  0,  0,  0,  0]]
 
-# 0 = NoCollision; 1 = Collision
+# 0 = NoCollision; 1 = Collisio
 collisionsTiles= [[  1,  1,  1,  1,  1,  1,  1,  1],
                   [  1,  0,  0,  0,  0,  0,  0,  1],
                   [  1,  0,  0,  1,  0,  0,  0,  1],
                   [  1,  0,  0,  0,  0,  0,  0,  1],
-                  [  1,  0,  0,  0,  0,  0,  0,  1],
+                  [  1,  0,  0,  0,  0,  1,  1,  1],
                   [  1,  0,  0,  0,  0,  0,  0,  1],
                   [  1,  0,  0,  0,  0,  0,  0,  1],
                   [  1,  1,  1,  1,  1,  1,  1,  1]]
