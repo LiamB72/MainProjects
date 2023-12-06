@@ -220,5 +220,4 @@ app = QApplication(sys.argv)
 window = MainWindows()
 app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
 window.closed.connect(on_window_closed)
-
 app.exec_()
