@@ -1,10 +1,11 @@
 """
 Simulateur de jeu de 52 cartes
-Liam BERGE TG1 | Started On: 21/10/2023 | Last Edit: 06/11/2023
+Liam BERGE TG1 | Started On: 21/10/2023 | Last Edit: 22/01/2024
 """
 
 import pickle
 import socket
+import sys
 from functools import partial
 
 from PyQt5 import uic, QtGui
@@ -522,11 +523,11 @@ class cardWindow(QWidget):
                 button.setMinimumSize(pixmap.size())
                 widget_layout.addWidget(button)
 
-            widget_layout.addStretch()  # Adds spacing to the right
+            widget_layout.addStretch()
             self.scroll_area.setWidget(widget)
             self.layout.addWidget(self.scroll_area)
         else:
-            pass
+            print("Your deck is empty.")
 
     def button_clicked(self, main_window):
         sender = self.sender()
@@ -544,7 +545,7 @@ class cardWindow(QWidget):
         self.close()
 
 
-app = QApplication([])
+app = QApplication(sys.argv)
 window = startMenu()
 window.show()
 
