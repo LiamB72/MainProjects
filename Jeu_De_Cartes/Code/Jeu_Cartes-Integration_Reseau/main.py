@@ -172,7 +172,7 @@ class playerWindow(QMainWindow):
             if self.debugging:
                 print(f"\n\nCartes du jeu:{self.jeu.carte}\n\n\nPaquet A:{self.paquetA}\n\n\nPaquet B:{self.paquetB}")
 
-            # Sends the variables to the player 2.
+            # Sends the variables to player 2.
             tempSock = self.sock
             tempSock.connect((self.RECEIVER_IP, self.RECEIVER_PORT))
 
@@ -185,7 +185,7 @@ class playerWindow(QMainWindow):
             self.paquetB = []
             self.tmpPaquetB = []
 
-        # Initialize other variable to be used by both players.
+        # Initialize other variables to be used by both players.
 
         self.comptA = 0
         self.batailleA = []
